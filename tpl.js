@@ -1,0 +1,200 @@
+/* Домилия — генератор страниц лендинга из content.json.
+   Работает и в браузере (админка), и в Node (node build.js).
+   LPT.page(C)      → index.html
+   LPT.thanks(C)    → spasibo/index.html
+   LPT.notFound(C)  → 404.html                                   */
+(function(root){
+  'use strict';
+  var LOGO = '<svg class="lg mn-lg" viewBox="30 26 418 416" aria-hidden="true"> <defs>  <linearGradient id="gG_m1" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#1FE6AA"/><stop offset=".45" stop-color="#00B47E"/><stop offset="1" stop-color="#006C4C"/></linearGradient>  <linearGradient id="gBand_m1" x1="55" y1="432" x2="351" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00B47E"/><stop offset=".55" stop-color="#14D69C"/><stop offset="1" stop-color="#2A4A42"/></linearGradient>  <linearGradient id="gRoof_m1" x1="290" y1="36" x2="400" y2="160" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4A4F53"/><stop offset=".7" stop-color="#7C8488"/><stop offset="1" stop-color="#5C6367"/></linearGradient>  <linearGradient id="gSide_m1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A6064"/><stop offset="1" stop-color="#2B2F32"/></linearGradient>  <linearGradient id="gLow_m1" x1="230" y1="300" x2="420" y2="430" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3A4044"/><stop offset="1" stop-color="#0E1011"/></linearGradient>  <linearGradient id="gLeg_m1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4C5357"/><stop offset="1" stop-color="#16191B"/></linearGradient> </defs> <g class="dm-mk"><path class="t" style="--i:7;--dx:10.0px;--dy:9.8px" fill="url(#gLow_m1)" d="M208,431 L351,328 L351,286 L438,252 L438,363 L351,431 Z"/><path class="t" style="--i:6;--dx:13.9px;--dy:-2.0px" fill="url(#gSide_m1)" d="M351,179 L438,129 L438,252 L351,286 Z"/><path class="t" style="--i:5;--dx:9.5px;--dy:-10.3px" fill="url(#gRoof_m1)" d="M290,36 L438,129 L351,179 L290,143 Z"/><path class="t" style="--i:4;--dx:2.3px;--dy:-13.8px" fill="url(#gG_m1)" d="M208,94 L290,36 L290,143 Z"/><path class="t" style="--i:3;--dx:0.2px;--dy:14.0px" fill="url(#gBand_m1)" d="M55,432 L351,286 L351,328 L208,431 Z"/><path class="t b" style="--i:1;--dx:-13.9px;--dy:-1.8px" fill="url(#gG_m1)" d="M202,94 L112,159 L112,390 L150,370 L150,182 L202,145 Z"/><path class="t b" style="--i:2;--dx:-13.1px;--dy:5.0px" fill="url(#gLeg_m1)" d="M202,145 L166,170 L166,363 L202,343 Z"/><path class="t b" style="--i:1;--dx:-11.7px;--dy:7.7px" fill="#0C3A2B" d="M150,214 L154,212 L154,368 L150,370 Z"/><path class="t b" style="--i:0;--dx:-12.3px;--dy:6.6px" fill="url(#gG_m1)" d="M95,221 L40,257 L40,427 L95,398 Z"/><path class="t b" style="--i:0;--dx:-12.3px;--dy:6.6px" fill="#0C3A2B" d="M95,221 L99,226 L99,396 L95,398 Z"/></g><defs><clipPath id="dmc_m1"><path d="M208,431 L351,328 L351,286 L438,252 L438,363 L351,431 Z"/><path d="M351,179 L438,129 L438,252 L351,286 Z"/><path d="M290,36 L438,129 L351,179 L290,143 Z"/><path d="M208,94 L290,36 L290,143 Z"/><path d="M55,432 L351,286 L351,328 L208,431 Z"/><path d="M202,94 L112,159 L112,390 L150,370 L150,182 L202,145 Z"/><path d="M202,145 L166,170 L166,363 L202,343 Z"/><path d="M150,214 L154,212 L154,368 L150,370 Z"/><path d="M95,221 L40,257 L40,427 L95,398 Z"/><path d="M95,221 L99,226 L99,396 L95,398 Z"/></clipPath><linearGradient id="dms_m1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><g clip-path="url(#dmc_m1)"><rect class="sh" x="-60" y="0" width="120" height="520" fill="url(#dms_m1)" transform="skewX(-20)"/></g></svg><span><svg class="dm-word" viewBox="480 176 984 132" aria-hidden="true"><defs><linearGradient id="gL_wl" x1="1144" y1="181" x2="1057" y2="303" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1FE6AA"/><stop offset="1" stop-color="#00915F"/></linearGradient></defs> <g id="word_wl" fill="currentColor" fill-rule="evenodd"><path d="M487,277 L499,277 L550,181 L575,181 L626,277 L637,277 L637,303 L487,303 Z M529,277 L562.5,215 L596,277 Z"/><path d="M763,241.5 A64.5,63.5 0 1 0 634,241.5 A64.5,63.5 0 1 0 763,241.5 Z M737,241.5 A38.5,38.5 0 1 1 660,241.5 A38.5,38.5 0 1 1 737,241.5 Z"/><path d="M773,181 L799,181 L844.5,233 L890,181 L916,181 L916,303 L889,303 L889,227 L844.5,278 L800,227 L800,303 L773,303 Z"/><path d="M931,181 L958,181 L958,255 L1025,181 L1049,181 L1049,303 L1022,303 L1022,226 L953,303 L931,303 Z"/><path d="M1148,192 L1201,303 L1171,303 L1133,226 Z"/><path d="M1210,181 L1236,181 L1236,256 L1305,181 L1329,181 L1329,303 L1302,303 L1302,227 L1232,303 L1210,303 Z"/><path d="M1457,181 H1380 A38,38 0 0 0 1372,256.2 L1340,303 H1372 L1400,261 H1429 V303 H1457 Z M1429,206 H1385 A15,15 0 0 0 1385,236 H1429 Z"/></g><path class="dm-l" fill="url(#gL_wl)" d="M1057,303 L1088,303 L1144,181 L1116,181 Z"/></svg><small>РЕМОНТ КВАРТИР</small></span>';
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  /* **жирный** → <b> */
+  function md(s){ return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+  function money(n){ return (Math.round(n / 1000) * 1000).toLocaleString('ru-RU').replace(/ /g, ' '); }
+  function tel(p){ return 'tel:+' + String(p || '').replace(/\D/g, ''); }
+  function on(x){ return x && x.show !== false; }
+  function img(u){ return esc(u || ''); }
+
+  var ICONS = {
+    doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+    card:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/>',
+    shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    cart:'<path d="M3 7h18M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+    phone:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+    star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+    tools:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',
+    home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>',
+    check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+    ruble:'<path d="M8 21V4h6a4.5 4.5 0 0 1 0 9H6M6 17h8"/>'
+  };
+  function icon(n){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[n] || ICONS.check) + '</svg>'; }
+
+  function v(C){ return C._v || 1; }
+  function head(C, o){
+    var S = C.seo || {};
+    var title = o.title || S.title, desc = o.desc || S.description;
+    var robots = o.noindex || !S.index ? '<meta name="robots" content="noindex, follow">' : '';
+    return '<!DOCTYPE html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' +
+      '<script>document.documentElement.className+=" js"</script>\n' +
+      '<title>' + esc(title) + '</title>\n<meta name="description" content="' + esc(desc) + '">\n' + robots + '\n' +
+      (o.canonical ? '<link rel="canonical" href="' + esc(o.canonical) + '">\n' : '') +
+      '<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="Домилия">\n' +
+      '<meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">' + (S.ogImage ? '<meta property="og:image" content="' + esc(S.ogImage) + '">' : '') + '\n' +
+      '<meta name="theme-color" content="#16191B">\n' +
+      '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23141618%22/%3E%3Cpath d=%22M14 50V24l18-10 18 10v26H38V34H26v16z%22 fill=%22%2300B47E%22/%3E%3C/svg%3E">\n' +
+      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">\n' +
+      '<link rel="stylesheet" href="/style.css?v=' + v(C) + '">\n</head>\n';
+  }
+
+  function msgrs(C, cls){
+    var s = C.settings || {}, h = '';
+    if (s.whatsapp) h += '<a class="msg wa on" data-goal="lp_messenger" href="https://wa.me/' + esc(String(s.whatsapp).replace(/\D/g, '')) + '" target="_blank" rel="noopener" aria-label="Написать в WhatsApp">WA</a>';
+    if (s.max) h += '<a class="msg mx on" data-goal="lp_messenger" href="' + esc(s.max) + '" target="_blank" rel="noopener" aria-label="Написать в MAX">MAX</a>';
+    if (s.telegram) h += '<a class="msg tg on" data-goal="lp_messenger" href="' + esc(/^https?:/.test(s.telegram) ? s.telegram : 'https://t.me/' + String(s.telegram).replace(/^@/, '')) + '" target="_blank" rel="noopener" aria-label="Написать в Telegram">TG</a>';
+    return h;
+  }
+  function header(C, cta){
+    var s = C.settings || {};
+    return '<header class="top">\n  <div class="w">\n    <a class="mn-logo" href="/" aria-label="Домилия — ремонт квартир">' + LOGO + '</a>\n    <div class="top-r">' + msgrs(C) +
+      '<a class="top-ph" data-tel data-goal="lp_call" href="' + tel(s.phone) + '"><span class="num">' + esc(s.phone) + '</span><small>' + esc(s.hours || '') + '</small></a>' +
+      (cta === false ? '' : '<a class="btn" href="/#calc" data-goal="lp_cta_top">' + esc(s.headerBtn || 'Рассчитать стоимость') + '</a>') +
+      '</div>\n  </div>\n</header>\n';
+  }
+  function footer(C){
+    var s = C.settings || {}, co = s.company || {};
+    var req = [co.name, co.inn ? 'ИНН ' + co.inn : '', co.ogrn ? 'ОГРН ' + co.ogrn : '', co.address].filter(Boolean).join(' · ');
+    return '<footer class="foot">\n  <div class="w">\n    <div>© ' + new Date().getFullYear() + ' Домилия · ремонт квартир в Екатеринбурге' + (req ? '<br><small>' + esc(req) + '</small>' : '') + '</div>\n' +
+      '    <div class="foot-l"><a href="' + esc(s.mainSite || 'https://domilia.ru/') + '" target="_blank" rel="noopener">Основной сайт domilia.ru</a><a href="' + esc(s.privacyUrl) + '" target="_blank" rel="noopener">Политика конфиденциальности</a><a href="' + esc(s.consentUrl) + '" target="_blank" rel="noopener">Согласие на обработку данных</a></div>\n  </div>\n</footer>\n';
+  }
+  function cookie(C){
+    var k = C.cookie || {};
+    return '<div class="ck" id="ck" hidden><p>' + md(k.text) + ' <a href="' + esc((C.settings || {}).privacyUrl) + '" target="_blank" rel="noopener">Подробнее</a></p><button type="button" id="ckOk">' + esc(k.btn || 'Понятно') + '</button></div>\n';
+  }
+  /* настройки для скрипта страницы — без лишнего */
+  function config(C, page){
+    var s = C.settings || {};
+    var cfg = { page:page, phone:s.phone, hours:s.hours, to:s.formKey || s.email || '', ym:+s.ym || 0, privacy:s.privacyUrl, consent:s.consentUrl,
+      quiz:C.quiz, antispam:C.antispam || {}, objects:on(C.objects) ? (C.objects.items || []).filter(function(o){ return o.photos && o.photos.length; }).slice(0, 9) : [], objBtn:(C.objects || {}).btn, finalBtn:(C.final || {}).btn };
+    return '<script>window.LPC=' + JSON.stringify(cfg).replace(/</g, '\\u003c') + '</script>\n<script src="/app.js?v=' + v(C) + '" defer></script>\n';
+  }
+  function tag(t, style){ return t ? '<div class="tag"' + (style ? ' style="' + style + '"' : '') + '>' + esc(t) + '</div>' : ''; }
+  function secH(x){ return '<div class="sec-h rv">' + tag(x.tag) + '<h2>' + esc(x.title) + '</h2>' + (x.sub ? '<p>' + md(x.sub) + '</p>' : '') + '</div>'; }
+
+  /* ---------- главная ---------- */
+  function hero(C){
+    var H = C.hero || {}, Q = C.quiz || {};
+    return '<section class="hero">\n  <div class="hero-bg" aria-hidden="true" style="background-image:url(' + img(H.bg) + ')"></div>\n  <div class="w">\n    <div>\n' +
+      (H.pre ? '      <div class="hero-pre"><i></i>' + esc(H.pre) + '</div>\n' : '') +
+      '      <h1>' + esc(H.title) + (H.accent ? ' <em>' + esc(H.accent) + '</em>' : '') + (H.titleEnd ? ' ' + esc(H.titleEnd) : '') + '</h1>\n' +
+      '      <p class="hero-sub">' + md(H.sub) + (H.subMore ? ' <span class="more">' + md(H.subMore) + '</span>' : '') + (H.subEnd ? ' ' + md(H.subEnd) : '') + '</p>\n' +
+      ((H.facts || []).length ? '      <div class="facts">' + H.facts.map(function(f){ return '<div><b>' + esc(f.b) + '</b><span>' + esc(f.t) + '</span></div>'; }).join('') + '</div>\n' : '') +
+      (H.gift ? '      <div class="gift-strip"><svg viewBox="0 0 32 32" fill="none" stroke="#1FE6AA" stroke-width="2" stroke-linejoin="round"><rect x="5" y="12" width="22" height="15" rx="2"/><path d="M3 8h26v4H3zM16 8v19M16 8c-2-5-8-5-7-1s7 1 7 1zm0 0c2-5 8-5 7-1s-7 1-7 1z"/></svg><p>' + md(H.gift) + '</p></div>\n' : '') +
+      '    </div>\n    <div class="qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
+      '      <div class="qz-b" id="qzBody"><noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel((C.settings || {}).phone) + '">' + esc((C.settings || {}).phone) + '</a></p></noscript></div>\n    </div>\n  </div>\n</section>\n';
+  }
+  function prices(C){
+    var P = C.prices; if (!on(P)) return '';
+    var h = '<section class="sec" id="prices">\n  <div class="w">\n    ' + secH(P) + '\n';
+    if ((P.rows || []).length){
+      h += '    <div class="pl rv">\n      <div class="pl-r pl-hd"><span>Вид ремонта</span><span>Что входит</span><span>Работы за м²</span><span>Мин. заказ</span><span>Срок</span></div>\n' +
+        P.rows.map(function(r){ return '      <a class="pl-r' + (r.hit ? ' hit' : '') + '" href="#calc" data-kind="' + esc(r.kind || 'cap') + '"><b>' + esc(r.name) + (r.note ? '<small>' + esc(r.note) + '</small>' : '') + '</b><span>' + esc(r.inc) + '</span><strong>' + esc(r.price) + '</strong><span data-l="Мин. заказ">' + esc(r.min) + '</span><span data-l="Срок">' + esc(r.term) + '</span></a>\n'; }).join('') +
+        '    </div>\n';
+    }
+    var M = P.matrix;
+    if (M && M.show !== false && (M.cols || []).length && (M.rows || []).length){
+      h += '    <h3 class="mx-t rv">' + esc(M.title) + '</h3>\n    <div class="mx-w rv"><table class="mx"><thead><tr><th>Квартира</th>' +
+        M.cols.map(function(c){ return '<th' + (c.hl ? ' class="hl"' : '') + '>' + esc(c.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        M.rows.map(function(r){ return '<tr><td>' + esc(r.name) + ', ' + esc(r.area) + ' м²</td>' + M.cols.map(function(c){ return '<td' + (c.hl ? ' class="hl"' : '') + '>' + money(c.rate * r.area) + ' ₽</td>'; }).join('') + '</tr>'; }).join('') +
+        '</tbody></table></div>\n    <div class="mx-n rv"><span>' + esc(M.note) + '</span>' + (M.btn ? '<a class="btn" href="#calc" data-goal="lp_cta_matrix">' + esc(M.btn) + '</a>' : '') + '</div>\n';
+    }
+    if ((P.adds || []).length) h += '    <div class="adds rv">' + P.adds.map(function(a){ return '<div><b>' + esc(a.name) + '</b><span>' + md(a.text).replace(/<b>/g, '<em>').replace(/<\/b>/g, '</em>') + '</span></div>'; }).join('') + '</div>\n';
+    return h + '  </div>\n</section>\n';
+  }
+  function objects(C, cfgObjs){
+    var O = C.objects; if (!on(O)) return '';
+    var L = (O.items || []).filter(function(o){ return o.photos && o.photos.length; }).slice(0, 9);
+    if (!L.length) return '';
+    return '<section class="sec" style="padding-top:0" id="objs">\n  <div class="w">\n    ' + secH(O) + '\n    <div class="objs" id="objList">' +
+      L.map(function(p, i){
+        return '<button type="button" class="ob rv" data-o="' + i + '"><span class="ob-i"><img src="' + img(p.photos[0]) + '" alt="' + esc(p.title) + '" loading="lazy">' + (p.demo ? '<i class="ob-demo">пример</i>' : '') + '<i class="ob-n">' + p.photos.length + ' фото</i></span>' +
+          '<span class="ob-b"><small>' + esc(p.type) + '</small><h3>' + esc(p.title) + '</h3><span class="chips">' + (p.area ? '<span>' + esc(p.area) + ' м²</span>' : '') + (p.days ? '<span>' + esc(p.days) + ' дней</span>' : '') + (p.district ? '<span>' + esc(p.district) + '</span>' : '') + '</span>' +
+          '<span class="ob-p"><strong>' + esc(p.price) + '</strong><em>Смотреть →</em></span></span></button>';
+      }).join('') + '</div>\n  </div>\n</section>\n';
+  }
+  function gift(C){
+    var G = C.gift; if (!on(G)) return '';
+    return '<section class="sec" style="padding-top:0">\n  <div class="w">\n    <div class="gift rv">\n      <div class="gift-t">' + tag(G.tag) + '<h2>' + esc(G.title) + '</h2><p>' + md(G.text) + '</p>' +
+      '<ul class="gift-l">' + (G.items || []).map(function(x, i){ return '<li><b>' + (i + 1) + '</b><span>' + esc(x.t) + (x.s ? '<small>' + esc(x.s) + '</small>' : '') + '</span></li>'; }).join('') + '</ul>' +
+      (G.btn ? '<a class="btn glow" href="#calc" data-goal="lp_cta_gift">' + esc(G.btn) + '</a>' : '') + (G.note ? '<p class="fine">' + esc(G.note) + '</p>' : '') + '</div>\n' +
+      '      <div class="gift-i" role="img" aria-label="' + esc(G.title) + '" style="background-image:url(' + img(G.img) + ')">' + (G.badge ? '<span class="gift-badge">' + esc(G.badge) + '</span>' : '') + '</div>\n    </div>\n  </div>\n</section>\n';
+  }
+  function film(C){
+    var F = C.film; if (!on(F) || !F.video) return '';
+    return '<section class="sec" style="padding-top:0" id="film">\n  <div class="w film">\n    <div class="film-v rv"><video id="vid" preload="none" playsinline data-src="' + esc(F.video) + '" poster="' + img(F.poster) + '"></video>' +
+      '<button type="button" id="vidPlay" aria-label="Смотреть ролик о компании"><svg viewBox="0 0 24 24" fill="#06261B"><path d="M7 4.5v15l13-7.5z"/></svg></button></div>\n' +
+      '    <div class="rv">' + tag(F.tag) + '<h2>' + esc(F.title) + '</h2><ul>' + (F.items || []).map(function(x, i){ return '<li><b>' + (i < 9 ? '0' : '') + (i + 1) + '</b>' + esc(x) + '</li>'; }).join('') + '</ul></div>\n  </div>\n</section>\n';
+  }
+  function steps(C){
+    var S = C.steps; if (!on(S)) return '';
+    return '<section class="sec" style="padding-top:0" id="how">\n  <div class="w">\n    ' + secH(S) + '\n    <div class="steps">' +
+      (S.items || []).map(function(x){ return '<div class="st rv"><h3>' + esc(x.t) + '</h3><p>' + md(x.s) + '</p>' + (x.badge ? '<span class="free">' + esc(x.badge) + '</span>' : '') + '</div>'; }).join('') + '</div>\n  </div>\n</section>\n';
+  }
+  function why(C){
+    var W = C.why; if (!on(W)) return '';
+    return '<section class="sec" style="padding-top:0">\n  <div class="w">\n    ' + secH(W) + '\n    <div class="why">' +
+      (W.items || []).map(function(x){ return '<div class="wy rv">' + icon(x.icon) + '<div><h3>' + esc(x.t) + '</h3><p>' + md(x.s) + '</p></div></div>'; }).join('') + '</div>\n  </div>\n</section>\n';
+  }
+  function faq(C){
+    var F = C.faq; if (!on(F) || !(F.items || []).length) return '';
+    var ld = { '@context':'https://schema.org', '@type':'FAQPage', mainEntity:F.items.map(function(x){ return { '@type':'Question', name:x.q, acceptedAnswer:{ '@type':'Answer', text:x.a } }; }) };
+    return '<section class="sec" style="padding-top:0" id="faq">\n  <div class="w">\n    ' + secH(F) + '\n    <div class="faq rv">' +
+      F.items.map(function(x, i){ return '<details' + (i ? '' : ' open') + '><summary>' + esc(x.q) + '</summary><p>' + md(x.a) + '</p></details>'; }).join('') + '</div>\n  </div>\n</section>\n' +
+      '<script type="application/ld+json">' + JSON.stringify(ld).replace(/</g, '\\u003c') + '</script>\n';
+  }
+  function finalB(C){
+    var F = C.final || {}, s = C.settings || {};
+    return '<section class="sec" style="padding-top:0" id="final">\n  <div class="w">\n    <div class="fin rv">\n      <div>' + tag(F.tag, 'color:var(--g3)') + '<h2>' + esc(F.title) + '</h2><p>' + md(F.text) + '</p>' +
+      ((F.items || []).length ? '<ul class="fin-list">' + F.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + '</div>\n' +
+      '      <div class="lf fin-f"><b class="t">' + esc(F.formTitle) + '</b><div id="finForm"><a class="btn wide" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a></div></div>\n    </div>\n  </div>\n</section>\n';
+  }
+  function mbar(C){
+    return '<div class="mbar" id="mbar"><a class="btn lt" data-tel data-goal="lp_call" href="' + tel((C.settings || {}).phone) + '">Позвонить</a><a class="btn" href="#calc" data-goal="lp_cta_bar">Рассчитать</a></div>\n';
+  }
+
+  function page(C){
+    var host = 'https://remont.domilia.ru/';
+    return head(C, { canonical:host }) + '<body>\n' + header(C) + '<main>\n' + hero(C) + prices(C) + objects(C) + gift(C) + film(C) + steps(C) + why(C) + faq(C) + finalB(C) + '</main>\n' +
+      footer(C) + mbar(C) + cookie(C) + config(C, 'main') + '</body>\n</html>\n';
+  }
+
+  /* ---------- спасибо ---------- */
+  function thanks(C){
+    var T = C.thanks || {}, s = C.settings || {};
+    return head(C, { title:'Спасибо за заявку — Домилия', desc:T.text, noindex:true }) + '<body class="pg">\n' + header(C, false) +
+      '<main class="pg-m">\n  <div class="w">\n    <div class="pg-card">\n      <div class="pg-ok"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#E6F6F0"/><path d="M20 33l8 8 16-18" fill="none" stroke="#007A55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>\n' +
+      '      <h1>' + esc(T.title) + '</h1>\n      <p class="pg-lead">' + md(T.text) + '</p>\n' +
+      '      <div class="pg-sum" id="sum" hidden></div>\n' +
+      ((T.steps || []).length ? '      <ol class="pg-steps">' + T.steps.map(function(x){ return '<li><b>' + esc(x.t) + '</b><span>' + esc(x.s) + '</span></li>'; }).join('') + '</ol>\n' : '') +
+      '      <div class="pg-act"><a class="btn" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a>' + msgrs(C) + '</div>\n' +
+      '      <p class="pg-back"><a href="/">' + esc(T.btn || 'Вернуться на главную') + '</a></p>\n    </div>\n  </div>\n</main>\n' + footer(C) + cookie(C) + config(C, 'thanks') + '</body>\n</html>\n';
+  }
+
+  /* ---------- 404 ---------- */
+  function notFound(C){
+    var N = C.notFound || {}, P = C.prices || {}, s = C.settings || {};
+    var rows = (P.rows || []).slice(0, 6);
+    return head(C, { title:'Страница не найдена — ремонт квартир в Екатеринбурге | Домилия', desc:N.text, noindex:true }) + '<body class="pg">\n' + header(C) +
+      '<main class="pg-m">\n  <div class="w">\n    <div class="pg-card nf">\n      <div class="nf-code">404</div>\n      <h1>' + esc(N.title) + '</h1>\n      <p class="pg-lead">' + md(N.text) + '</p>\n' +
+      '      <div class="pg-act"><a class="btn" href="/#calc">Рассчитать стоимость</a><a class="btn lt" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></div>\n' +
+      (rows.length ? '      <div class="nf-pr">' + rows.map(function(r){ return '<a href="/#prices"><b>' + esc(r.name) + '</b><span>' + esc(r.price) + '/м²</span></a>'; }).join('') + '</div>\n' : '') +
+      '      <p class="pg-back"><a href="/">Главная страница</a> · <a href="/#prices">Цены</a> · <a href="/#faq">Вопросы</a> · <a href="' + esc(s.mainSite) + '">domilia.ru</a></p>\n    </div>\n  </div>\n</main>\n' +
+      footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
+  }
+
+  var LPT = { page:page, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  root.LPT = LPT;
+  if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
+})(typeof window !== 'undefined' ? window : this);
