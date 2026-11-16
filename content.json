@@ -1,5 +1,5 @@
 {
- "_v": 1794835298611,
+ "_v": 1794835750349,
  "settings": {
   "phone": "+7 (992) 001-43-88",
   "email": "zakaz-domilia@yandex.ru",
@@ -298,7 +298,7 @@
     "days": 84,
     "price": "1 260 000 ₽",
     "year": 2026,
-    "demo": true,
+    "demo": false,
     "task": "Вторичка 2005 года: старая алюминиевая проводка, кривые стены, тесная ванная. Хотели светлую квартиру и кухню-гостиную.",
     "done": [
      "Демонтаж до бетона и вывоз мусора",
@@ -309,10 +309,10 @@
      "Чистовая отделка и санузел под ключ"
     ],
     "photos": [
-     "https://domilia.ru/img/28254550.jpg",
-     "https://domilia.ru/img/15220864.jpg",
-     "https://domilia.ru/img/28853362.jpg",
-     "https://domilia.ru/img/15220867.jpg"
+     "/img/dvuhkomnatnaya-kvartira-v-akademicheskom-nku7td.webp",
+     "/img/dvuhkomnatnaya-kvartira-v-akademicheskom-n2sz6x.webp",
+     "/img/dvuhkomnatnaya-kvartira-v-akademicheskom-9qak08.webp",
+     "/img/dvuhkomnatnaya-kvartira-v-akademicheskom-nv9jao.webp"
     ]
    },
    {
