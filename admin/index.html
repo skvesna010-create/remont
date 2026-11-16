@@ -426,6 +426,16 @@ var V = {
     w.appendChild(card('Дополнительные услуги', [['adds','Карточки','list','',{ fields:[['name','Название'],['text','Текст','text','**текст** — выделить зелёным']], blank:{ name:'', text:'' } }]], C.prices));
   }],
   objects:['Объекты', objectsView],
+  reviews:['Отзывы', function(w){
+    w.appendChild(card('Блок «Отзывы»', [SHOW('Отзывы'),['tag','Метка'],['title','Заголовок'],['sub','Подзаголовок','textarea'],['rating','Рейтинг, например 4,9'],['count','Подпись к рейтингу, например «по 37 отзывам на Яндекс Картах»'],['yandex','Ссылка на отзывы в Яндекс Картах'],['gis','Ссылка на отзывы в 2ГИС']], C.reviews,
+      'Блок появится на сайте, когда будет хотя бы один отзыв. Добавляйте <b>только настоящие</b> отзывы клиентов — например, перенесите их с Яндекс Карт или 2ГИС и укажите ссылку на оригинал. Выдуманные отзывы запрещены законом о рекламе и подрывают доверие.'));
+    w.appendChild(card('Отзывы', [['items','Отзывы клиентов','list','',{ title:function(it){ return (it.name || 'Новый отзыв') + (it.work ? ' — ' + it.work : ''); }, fields:[['name','Имя клиента'],['place','Район / дом'],['work','Что делали'],['date','Когда, например «октябрь 2026»'],['stars','Оценка','select','',{ options:[['5','★★★★★ 5'],['4','★★★★ 4'],['3','★★★ 3']] }],['source','Где оставлен','select','',{ options:[['yandex','Яндекс Карты'],['2gis','2ГИС'],['avito','Авито'],['vk','ВКонтакте'],['site','Лично / по почте']] }],['link','Ссылка на оригинал отзыва','text','',{ wide:true }],['text','Текст отзыва','textarea'],['photo','Фото клиента (по желанию)','image','',{ name:'review', wm:false }]], blank:{ name:'', place:'', work:'', date:'', stars:'5', source:'yandex', link:'', text:'', photo:'' } }]], C.reviews));
+  }],
+  team:['Команда', function(w){
+    w.appendChild(card('Блок «Команда»', [SHOW('Команда'),['tag','Метка'],['title','Заголовок'],['sub','Подзаголовок','textarea']], C.team,
+      'Если имя не заполнено — в карточке показывается только должность. Фото лучше квадратное, лицо по центру, на светлом фоне.'));
+    w.appendChild(card('Сотрудники', [['items','Сотрудники','list','',{ title:function(it){ return (it.name || 'Без имени') + ' — ' + (it.role || ''); }, fields:[['name','Имя и фамилия'],['role','Должность'],['exp','Стаж, например «опыт 12 лет»'],['text','Чем занимается','textarea'],['photo','Фото','image','',{ name:'team', wm:false }]], blank:{ name:'', role:'', exp:'', text:'', photo:'' } }]], C.team));
+  }],
   gift:['Подарок', function(w){ w.appendChild(card('Блок «Подарок»', [SHOW('Подарок'),['tag','Метка'],['title','Заголовок'],['badge','Наклейка на фото'],['btn','Кнопка'],['text','Текст','textarea'],['note','Условие мелким шрифтом','text','',{ wide:true }],['img','Фото','image','',{ name:'gift' }],['items','Пункты','list','',{ fields:[['t','Пункт'],['s','Пояснение']], blank:{ t:'', s:'' } }]], C.gift)); }],
   film:['Ролик', function(w){ w.appendChild(card('Ролик о компании', [SHOW('Ролик'),['tag','Метка'],['title','Заголовок'],['video','Ссылка на видео (mp4)','text','',{ wide:true }],['poster','Обложка видео','image','',{ name:'poster', wm:false }],['items','Пункты рядом с видео','strings']], C.film,
     'Видео лучше хранить на основном сайте: <code>https://domilia.ru/media/…mp4</code>. Чтобы заменить ролик, пришлите его разработчику или загрузите в админке основного сайта.')); }],
@@ -469,7 +479,7 @@ var V = {
       '<li>На сайте уже стоит фильтр ботов в формах: ложные заявки не придут вам на почту.</li>' })]));
   }]
 };
-var ORDER = ['settings','hero','quiz','prices','objects','gift','film','steps','why','faq','final','pages','seo','metrika','protect'];
+var ORDER = ['settings','hero','quiz','prices','objects','reviews','team','gift','film','steps','why','faq','final','pages','seo','metrika','protect'];
 
 function side(){
   var s = $('#side'); s.innerHTML = '';

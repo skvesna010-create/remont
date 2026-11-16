@@ -160,13 +160,41 @@
       ((F.items || []).length ? '<ul class="fin-list">' + F.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') + '</div>\n' +
       '      <div class="lf fin-f"><b class="t">' + esc(F.formTitle) + '</b><div id="finForm"><a class="btn wide" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a></div></div>\n    </div>\n  </div>\n</section>\n';
   }
+
+  function stars(n){ n = Math.max(0, Math.min(5, Math.round(+n || 5))); return '<span class="stars" aria-label="Оценка ' + n + ' из 5">' + '★★★★★'.slice(0, n) + '<i>' + '★★★★★'.slice(n) + '</i></span>'; }
+  var SRC = { yandex:'Яндекс Карты', '2gis':'2ГИС', avito:'Авито', vk:'ВКонтакте', site:'Отзыв клиента' };
+  function reviews(C){
+    var R = C.reviews; if (!on(R)) return '';
+    var L = (R.items || []).filter(function(r){ return r && r.text && r.name; });
+    if (!L.length) return '';
+    var links = (R.yandex ? '<a href="' + esc(R.yandex) + '" target="_blank" rel="noopener">Все отзывы на Яндекс Картах</a>' : '') + (R.gis ? '<a href="' + esc(R.gis) + '" target="_blank" rel="noopener">Отзывы в 2ГИС</a>' : '');
+    return '<section class="sec" style="padding-top:0" id="reviews">\n  <div class="w">\n    <div class="sec-h rv">' + tag(R.tag) + '<h2>' + esc(R.title) + '</h2>' + (R.sub ? '<p>' + md(R.sub) + '</p>' : '') +
+      (R.rating ? '<div class="rt"><b>' + esc(R.rating) + '</b>' + stars(Math.round(parseFloat(String(R.rating).replace(',', '.')))) + (R.count ? '<span>' + esc(R.count) + '</span>' : '') + '</div>' : '') + '</div>\n' +
+      '    <div class="rvs" id="rvList">' + L.map(function(r){
+        var src = SRC[r.source] || r.source || '';
+        return '<article class="rw rv"><div class="rw-h">' + (r.photo ? '<img src="' + img(r.photo) + '" alt="" loading="lazy">' : '<i class="av">' + esc(String(r.name).trim().charAt(0).toUpperCase()) + '</i>') +
+          '<div><b>' + esc(r.name) + '</b>' + (r.place ? '<small>' + esc(r.place) + '</small>' : '') + '</div>' + stars(r.stars) + '</div>' +
+          (r.work ? '<div class="rw-w">' + esc(r.work) + '</div>' : '') + '<p>' + md(r.text) + '</p>' +
+          '<div class="rw-f">' + (r.date ? '<span>' + esc(r.date) + '</span>' : '<span></span>') + (src ? (r.link ? '<a href="' + esc(r.link) + '" target="_blank" rel="noopener">' + esc(src) + ' ↗</a>' : '<span>' + esc(src) + '</span>') : '') + '</div></article>';
+      }).join('') + '</div>\n' + (links ? '    <div class="rw-l rv">' + links + '</div>\n' : '') + '  </div>\n</section>\n';
+  }
+  function team(C){
+    var T = C.team; if (!on(T)) return '';
+    var L = (T.items || []).filter(function(m){ return m && (m.role || m.name); });
+    if (!L.length) return '';
+    var user = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
+    return '<section class="sec" style="padding-top:0" id="team">\n  <div class="w">\n    ' + secH(T) + '\n    <div class="tm">' + L.map(function(m){
+      return '<div class="tm-c rv"><div class="tm-p">' + (m.photo ? '<img src="' + img(m.photo) + '" alt="' + esc(m.name || m.role) + '" loading="lazy">' : user) + '</div>' +
+        '<div class="tm-t">' + (m.name ? '<b>' + esc(m.name) + '</b><span class="tm-r">' + esc(m.role) + '</span>' : '<b>' + esc(m.role) + '</b>') + (m.exp ? '<span class="tm-e">' + esc(m.exp) + '</span>' : '') + (m.text ? '<p>' + md(m.text) + '</p>' : '') + '</div></div>';
+    }).join('') + '</div>\n  </div>\n</section>\n';
+  }
   function mbar(C){
     return '<div class="mbar" id="mbar"><a class="btn lt" data-tel data-goal="lp_call" href="' + tel((C.settings || {}).phone) + '">Позвонить</a><a class="btn" href="#calc" data-goal="lp_cta_bar">Рассчитать</a></div>\n';
   }
 
   function page(C){
     var host = 'https://remont.domilia.ru/';
-    return head(C, { canonical:host }) + '<body>\n' + header(C) + '<main>\n' + hero(C) + prices(C) + objects(C) + gift(C) + film(C) + steps(C) + why(C) + faq(C) + finalB(C) + '</main>\n' +
+    return head(C, { canonical:host }) + '<body>\n' + header(C) + '<main>\n' + hero(C) + prices(C) + objects(C) + reviews(C) + gift(C) + film(C) + steps(C) + team(C) + why(C) + faq(C) + finalB(C) + '</main>\n' +
       footer(C) + mbar(C) + cookie(C) + config(C, 'main') + '</body>\n</html>\n';
   }
 
