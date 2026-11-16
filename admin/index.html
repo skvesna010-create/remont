@@ -107,6 +107,16 @@ code{background:var(--bg);padding:2px 6px;border-radius:6px;font-size:13px}
 </head>
 <body>
 
+<div class="login" id="plogin" hidden>
+  <h1>Вход в админку</h1>
+  <p class="muted">Лендинг remont.domilia.ru</p>
+  <label class="f">Пароль<input type="password" id="pPass" autocomplete="current-password"></label>
+  <label class="chk"><input type="checkbox" id="pRem" checked>Запомнить на этом устройстве</label>
+  <div class="err" id="pErr" hidden></div>
+  <button class="btn" id="pGo">Войти</button>
+  <button class="btn lt sm" id="pKey" type="button">Войти с ключом GitHub</button>
+</div>
+
 <div class="login" id="login" hidden>
   <h1>Админка лендинга</h1>
   <p class="muted">Все изменения сохраняются в репозиторий GitHub, и лендинг remont.domilia.ru обновляется сам через 1–2 минуты.</p>
@@ -167,7 +177,7 @@ function slug(s){ var m = { а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:
 function get(o, p){ return p.split('.').reduce(function(a, k){ return a == null ? undefined : a[k]; }, o); }
 function set(o, p, v){ var ks = p.split('.'), l = ks.pop(); var t = ks.reduce(function(a, k){ if (a[k] == null || typeof a[k] !== 'object') a[k] = {}; return a[k]; }, o); t[l] = v; }
 
-var CFG = {}; try { CFG = JSON.parse(localStorage.getItem('lp-admin') || '{}'); } catch(e){}
+var CFG = {}; try { CFG = JSON.parse(localStorage.getItem('lp-admin') || sessionStorage.getItem('lp-admin') || '{}'); } catch(e){}
 var C = null, C0 = '', files = {}, dels = {}, TREE = null, view = 'settings';
 
 /* ================== GitHub ================== */
@@ -179,6 +189,53 @@ function gh(path, opt){
     .then(function(r){ if (!r.ok) return r.text().then(function(t){ var m = t; try { m = JSON.parse(t).message; } catch(e){} var er = new Error(r.status + ': ' + m); er.status = r.status; throw er; }); return opt.raw ? r.text() : r.json(); });
 }
 function tree(){ return TREE ? Promise.resolve(TREE) : gh('/git/trees/' + BRANCH + '?recursive=1').then(function(j){ TREE = j.tree.filter(function(x){ return x.type === 'blob'; }).map(function(x){ return x.path; }); return TREE; }); }
+
+/* ================== пароль: ключ GitHub хранится зашифрованным ================== */
+var enc = new TextEncoder(), dec = new TextDecoder();
+function b2a(u){ return btoa(String.fromCharCode.apply(null, new Uint8Array(u))); }
+function a2b(s){ return Uint8Array.from(atob(s), function(c){ return c.charCodeAt(0); }); }
+function kdf(pass, salt, iter){
+  return crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveKey']).then(function(k){
+    return crypto.subtle.deriveKey({ name:'PBKDF2', salt:salt, iterations:iter, hash:'SHA-256' }, k, { name:'AES-GCM', length:256 }, false, ['encrypt', 'decrypt']); });
+}
+function seal(token, pass){
+  var salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iter = 600000;
+  return kdf(pass, salt, iter).then(function(k){ return crypto.subtle.encrypt({ name:'AES-GCM', iv:iv }, k, enc.encode(token)); })
+    .then(function(ct){ return { v:1, repo:CFG.repo, iter:iter, salt:b2a(salt), iv:b2a(iv), ct:b2a(ct) }; });
+}
+function unseal(K, pass){
+  return kdf(pass, a2b(K.salt), K.iter).then(function(k){ return crypto.subtle.decrypt({ name:'AES-GCM', iv:a2b(K.iv) }, k, a2b(K.ct)); }).then(function(b){ return dec.decode(b); });
+}
+var KEYF = null;
+function showPass(msg){ $('#app').hidden = true; $('#login').hidden = true; $('#plogin').hidden = false; if (msg){ $('#pErr').hidden = false; $('#pErr').textContent = msg; } setTimeout(function(){ $('#pPass').focus(); }, 50); }
+$('#pKey').onclick = function(){ $('#plogin').hidden = true; showLogin(); };
+$('#pPass').addEventListener('keydown', function(e){ if (e.key === 'Enter') $('#pGo').click(); });
+$('#pGo').onclick = function(){
+  var pass = $('#pPass').value; if (!pass) return showPass('Введите пароль.');
+  $('#pGo').disabled = true; $('#pGo').textContent = 'Проверяю…';
+  unseal(KEYF, pass).then(function(tok){
+    CFG = { repo:KEYF.repo || 'skvesna010-create/remont', token:tok, remember:$('#pRem').checked };
+    return boot();
+  }).catch(function(e){ showPass(e && e.status ? 'Ключ внутри пароля больше не действует — войдите с новым ключом GitHub и задайте пароль заново.' : 'Неверный пароль.'); })
+    .then(function(){ $('#pGo').disabled = false; $('#pGo').textContent = 'Войти'; });
+};
+function setPassCard(w){
+  var c = h('div', { class:'card' }, [h('h3', { text:'Вход по паролю' }), h('div', { class:'hint', html:(KEYF ? 'Пароль уже задан. Можно поменять его: введите новый.' : 'Задайте пароль — и дальше в админку можно входить <b>только по паролю</b>, без ключа GitHub, с любого устройства.') + ' Ключ GitHub зашифруется этим паролем. Пароль — не короче 10 символов; если забудете, просто войдите с ключом и задайте новый.' })]);
+  var p1 = h('input', { type:'password', autocomplete:'new-password' }), p2 = h('input', { type:'password', autocomplete:'new-password' }), msg = h('small', { text:'' });
+  var b = h('button', { type:'button', class:'btn', text:'Сохранить пароль', onclick:function(){
+    if (p1.value.length < 10) return (msg.textContent = 'Пароль должен быть не короче 10 символов.');
+    if (p1.value !== p2.value) return (msg.textContent = 'Пароли не совпадают.');
+    b.disabled = true; msg.textContent = 'Шифрую и сохраняю…';
+    seal(CFG.token, p1.value).then(function(K){
+      var body = { message:'Админка: пароль для входа', content:btoa(unescape(encodeURIComponent(JSON.stringify(K)))), branch:BRANCH };
+      return gh('/contents/admin/key.json?ref=' + BRANCH).then(function(f){ body.sha = f.sha; }, function(){}).then(function(){ return gh('/contents/admin/key.json', { method:'PUT', body:body }); }).then(function(){ KEYF = K; });
+    }).then(function(){ msg.textContent = 'Готово! Через 1–2 минуты можно входить по паролю.'; p1.value = p2.value = ''; })
+      .catch(function(e){ msg.textContent = 'Не получилось: ' + e.message; }).then(function(){ b.disabled = false; });
+  } });
+  c.appendChild(h('div', { class:'grid2' }, [h('label', { class:'f' }, ['Новый пароль', p1]), h('label', { class:'f' }, ['Повторите пароль', p2])]));
+  c.appendChild(h('div', { style:'display:flex;gap:12px;align-items:center;flex-wrap:wrap' }, [b, msg]));
+  w.insertBefore(c, w.firstChild);
+}
 
 /* ================== вход ================== */
 function showLogin(msg){ $('#app').hidden = true; $('#login').hidden = false; if (CFG.repo) $('#lRepo').value = CFG.repo; if (msg){ $('#lErr').hidden = false; $('#lErr').textContent = msg; } }
@@ -195,7 +252,7 @@ function boot(){
     return gh('/contents/content.json?ref=' + BRANCH, { raw:true });
   }).then(function(t){
     C = JSON.parse(t); C0 = JSON.stringify(C);
-    try { localStorage.setItem('lp-admin', JSON.stringify(CFG)); } catch(e){}
+    try { if (CFG.remember === false){ localStorage.removeItem('lp-admin'); sessionStorage.setItem('lp-admin', JSON.stringify(CFG)); } else localStorage.setItem('lp-admin', JSON.stringify(CFG)); } catch(e){}
     $('#login').hidden = true; $('#app').hidden = false; side(); go(view);
   });
 }
@@ -335,6 +392,7 @@ var ICONS = [['doc','Документ'],['card','Карта / оплата'],['s
 var SHOW = function(t){ return ['show', 'Показывать блок «' + t + '» на странице', 'bool']; };
 var V = {
   settings:['Контакты и настройки', function(w){
+    setPassCard(w);
     w.appendChild(card('Контакты', [['phone','Телефон','text','В формате +7 (992) 001-43-88'],['hours','Часы работы','text'],['whatsapp','WhatsApp — номер','text','Например 79920014388. Пусто — кнопки не будет'],['max','MAX — ссылка','text'],['telegram','Telegram — @ник или ссылка','text'],['headerBtn','Кнопка в шапке','text']], C.settings));
     w.appendChild(card('Заявки', [['email','Почта для заявок','text','Сюда приходят заявки'],['formKey','Секретный ключ FormSubmit (по желанию)','text','Длинный код из письма FormSubmit. Если указан — почта не видна в коде страницы, ботам её не найти']], C.settings,
       'Заявки отправляет сервис FormSubmit. <b>После первой заявки</b> на почту придёт письмо «Activate Form» — нажмите в нём кнопку, иначе заявки не будут приходить. В следующем письме будет секретный ключ — вставьте его в поле ниже.'));
@@ -419,7 +477,7 @@ function side(){
   ORDER.forEach(function(k){ s.appendChild(h('button', { type:'button', 'data-v':k, text:V[k][0], onclick:function(){ go(k); } })); });
   s.appendChild(h('div', { class:'sp' }));
   s.appendChild(h('button', { type:'button', text:'Открыть лендинг ↗', onclick:function(){ open(SITE, '_blank'); } }));
-  s.appendChild(h('button', { type:'button', text:'Выйти', onclick:function(){ if (isDirty() && !confirm('Есть неопубликованные изменения. Выйти?')) return; localStorage.removeItem('lp-admin'); location.reload(); } }));
+  s.appendChild(h('button', { type:'button', text:'Выйти', onclick:function(){ if (isDirty() && !confirm('Есть неопубликованные изменения. Выйти?')) return; localStorage.removeItem('lp-admin'); sessionStorage.removeItem('lp-admin'); location.reload(); } }));
   s.appendChild(h('small', { text:'remont.domilia.ru' }));
 }
 function go(k){
@@ -533,8 +591,11 @@ $('#ovOk').onclick = function(){ $('#ov').hidden = true; go(view); };
 /* шаблон страниц — тот же, что опубликован */
 var ts = document.createElement('script'); ts.src = '/tpl.js?t=' + Date.now(); document.head.appendChild(ts);
 
-if (CFG.token && CFG.repo) boot().catch(function(e){ showLogin(e.status === 401 ? 'Ключ больше не действует. Войдите заново.' : 'Ошибка входа: ' + e.message); });
-else showLogin();
+fetch('/admin/key.json?t=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }).then(function(K){
+  KEYF = K && K.ct ? K : null;
+  if (CFG.token && CFG.repo) boot().catch(function(e){ if (KEYF) showPass(e.status === 401 ? 'Сессия устарела. Введите пароль.' : 'Ошибка входа: ' + e.message); else showLogin(e.status === 401 ? 'Ключ больше не действует. Войдите заново.' : 'Ошибка входа: ' + e.message); });
+  else if (KEYF) showPass(); else showLogin();
+});
 })();
 </script>
 </body>
