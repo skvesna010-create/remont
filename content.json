@@ -1,5 +1,5 @@
 {
- "_v": 1794836694629,
+ "_v": 1794837629647,
  "settings": {
   "phone": "+7 (992) 001-43-88",
   "email": "zakaz-domilia@yandex.ru",
@@ -323,7 +323,7 @@
     "days": 70,
     "price": "722 000 ₽",
     "year": 2026,
-    "demo": true,
+    "demo": false,
     "task": "Квартира без отделки, покупали под сдачу. Нужен практичный ремонт, который выдержит жильцов.",
     "done": [
      "Электрика по расстановке мебели",
@@ -333,9 +333,9 @@
      "Двери, свет, уборка"
     ],
     "photos": [
-     "https://domilia.ru/img/14614670.jpg",
-     "https://domilia.ru/img/14614673.jpg",
-     "https://domilia.ru/img/15220864.jpg"
+     "/img/odnokomnatnaya-kvartira-v-novostroyke-na-9dkvqs.webp",
+     "/img/odnokomnatnaya-kvartira-v-novostroyke-na-a0gsbq.webp",
+     "/img/odnokomnatnaya-kvartira-v-novostroyke-na-hkdg0j.webp"
     ]
    },
    {
@@ -346,7 +346,7 @@
     "days": 21,
     "price": "215 000 ₽",
     "year": 2026,
-    "demo": true,
+    "demo": false,
     "task": "Старая плитка, ржавые трубы, ванна на всю стену. Хотели душевую без поддона и подвесной унитаз.",
     "done": [
      "Демонтаж и новые трубы",
@@ -369,7 +369,7 @@
     "days": 105,
     "price": "2 340 000 ₽",
     "year": 2026,
-    "demo": true,
+    "demo": false,
     "task": "Нужен ремонт строго по дизайн-проекту: теневые потолки, скрытые двери, сценарии света.",
     "done": [
      "Дизайн-проект в подарок",
@@ -393,7 +393,7 @@
     "days": 63,
     "price": "403 000 ₽",
     "year": 2026,
-    "demo": true,
+    "demo": false,
     "task": "Застройщик сделал white box. Нужно было проверить его работу и не переплатить за лишнее.",
     "done": [
      "Проверка работ застройщика",
@@ -415,7 +415,7 @@
     "days": 35,
     "price": "416 000 ₽",
     "year": 2026,
-    "demo": true,
+    "demo": false,
     "task": "Освежить квартиру перед продажей без замены коммуникаций.",
     "done": [
      "Шпаклёвка и покраска стен",
