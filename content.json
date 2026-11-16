@@ -1,5 +1,5 @@
 {
- "_v": 1794834880469,
+ "_v": 1794835153298,
  "settings": {
   "phone": "+7 (992) 001-43-88",
   "email": "zakaz-domilia@yandex.ru",
@@ -88,13 +88,13 @@
     "v": "new",
     "t": "Новостройка",
     "s": "без отделки или white box",
-    "img": "https://domilia.ru/img/33529500.jpg"
+    "img": "/img/quiz-zcg4an.webp"
    },
    {
     "v": "old",
     "t": "Вторичное жильё",
     "s": "есть старая отделка",
-    "img": "https://domilia.ru/img/1643383.jpg"
+    "img": "/img/quiz-vbmw78.webp"
    }
   ],
   "rooms": [
