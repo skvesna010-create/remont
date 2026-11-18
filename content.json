@@ -613,7 +613,7 @@
  },
  "antispam": {
   "minSeconds": 4,
-  "maxPerDay": 3
+  "maxPerDay": 5
  },
  "team": {
   "show": true,

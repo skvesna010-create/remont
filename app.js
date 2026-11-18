@@ -98,7 +98,7 @@
       if (!f.consent.checked){ $('.cons', f).classList.add('need'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
       goal('lp_form_submit');
       var bot = botLike(f);
-      if (bot){ goal('lp_bot'); return done(f, true); }          /* боту делаем вид, что всё прошло */
+      if (bot) goal('lp_bot');   /* подозрение на бота не выбрасываем — отмечаем в заявке, менеджер решит сам */
       var lim = limitHit(d);
       if (lim === 'dup'){ msg.className = 'lf-msg ok'; msg.textContent = 'Мы уже получили вашу заявку — инженер скоро перезвонит.'; return; }
       if (lim === 'max'){ msg.innerHTML = 'Слишком много заявок с этого устройства. Позвоните нам: <a href="' + TEL + '">' + esc(PHONE) + '</a>'; return; }
@@ -106,7 +106,7 @@
       var ref = ''; try { ref = sessionStorage.getItem('dm_ref') || ''; } catch(e2){}
       var data = Object.assign({ _subject:'Заявка с remont.domilia.ru — ' + title, _template:'table', _captcha:'false', _honey:'',
         'Заявка':title, 'Телефон':ph.value, 'Имя':f.name.value.trim() || '—', 'Страница':location.href, 'Откуда пришёл':ref,
-        'Время на сайте':Math.round((Date.now() - T0) / 1000) + ' сек' }, extra ? extra() : {}, UTM);
+        'Время на сайте':Math.round((Date.now() - T0) / 1000) + ' сек' }, bot ? { 'Проверка':'возможно бот (' + ({ honeypot:'заполнено скрытое поле', webdriver:'автоматический браузер', fast:'слишком быстро', nohuman:'нет движений' })[bot] + ')' } : {}, extra ? extra() : {}, UTM);
       var crm = toCRM(C.crm, data);
       (C.to ? fetch('https://formsubmit.co/ajax/' + encodeURIComponent(C.to), { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body:JSON.stringify(data) }).then(function(r){ return r.json(); }).catch(function(){ return {}; }) : Promise.resolve({}))
         .then(function(j){ return crm.then(function(okC){ return { j:j, okC:okC }; }); })
