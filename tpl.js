@@ -76,7 +76,7 @@
   /* настройки для скрипта страницы — без лишнего */
   function config(C, page){
     var s = C.settings || {};
-    var cfg = { page:page, phone:s.phone, hours:s.hours, to:s.formKey || s.email || '', crm:s.crm || '', ym:+s.ym || 0, privacy:s.privacyUrl, consent:s.consentUrl,
+    var cfg = { page:page, phone:s.phone, hours:s.hours, to:s.crm ? '' : (s.formKey || s.email || ''), crm:s.crm || '', ym:+s.ym || 0, privacy:s.privacyUrl, consent:s.consentUrl,
       quiz:C.quiz, antispam:C.antispam || {}, objects:on(C.objects) ? (C.objects.items || []).filter(function(o){ return o.photos && o.photos.length; }).slice(0, 9) : [], objBtn:(C.objects || {}).btn, finalBtn:(C.final || {}).btn };
     return '<script>window.LPC=' + JSON.stringify(cfg).replace(/</g, '\\u003c') + '</script>\n<script src="/app.js?v=' + v(C) + '" defer></script>\n';
   }
