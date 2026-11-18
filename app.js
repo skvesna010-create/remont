@@ -28,7 +28,9 @@
   function toCRM(url, d){ if (!url) return Promise.resolve(false); var skip = { _subject:1, _template:1, _captcha:1, _honey:1, 'Имя':1, 'Телефон':1 }, com = [], b = { name:(d['Имя'] && d['Имя'] !== '—') ? d['Имя'] : '', phone:d['Телефон'] || '', page:location.href };
     Object.keys(d).forEach(function(k){ if (skip[k]) return; if (/^utm_|^yclid$/.test(k)) { b[k] = d[k]; return; } if (d[k] !== '' && d[k] != null) com.push(k + ': ' + d[k]); });
     try { var u = JSON.parse(sessionStorage.getItem('dm_utm') || '{}'); Object.keys(u).forEach(function(k){ if (!b[k]) b[k] = u[k]; }); } catch(e){}
-    b.comment = com.join('\n'); var req = fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(b), keepalive:true }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+    b.comment = com.join('\n'); var fd = new URLSearchParams(); Object.keys(b).forEach(function(k){ if (b[k] != null && b[k] !== '') fd.append(k, b[k]); });
+    /* простая отправка формы: без лишних проверок браузера, не зависит от настроек CORS */
+    var req = fetch(url, { method:'POST', mode:'no-cors', body:fd, keepalive:true }).then(function(){ return true; }).catch(function(){ return false; });
     return Promise.race([req, new Promise(function(res){ setTimeout(function(){ res(false); }, 5000); })]); }
 
   /* метки рекламы: запоминаем на время визита и отправляем с заявкой */
