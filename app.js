@@ -108,14 +108,16 @@
         'Заявка':title, 'Телефон':ph.value, 'Имя':f.name.value.trim() || '—', 'Страница':location.href, 'Откуда пришёл':ref,
         'Время на сайте':Math.round((Date.now() - T0) / 1000) + ' сек' }, bot ? { 'Проверка':'возможно бот (' + ({ honeypot:'заполнено скрытое поле', webdriver:'автоматический браузер', fast:'слишком быстро', nohuman:'нет движений' })[bot] + ')' } : {}, extra ? extra() : {}, UTM);
       var crm = toCRM(C.crm, data);
-      (C.to ? fetch('https://formsubmit.co/ajax/' + encodeURIComponent(C.to), { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body:JSON.stringify(data) }).then(function(r){ return r.json(); }).catch(function(){ return {}; }) : Promise.resolve({}))
-        .then(function(j){ return crm.then(function(okC){ return { j:j, okC:okC }; }); })
+      var mail = C.to ? Promise.race([fetch('https://formsubmit.co/ajax/' + encodeURIComponent(C.to), { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body:JSON.stringify(data), keepalive:true }).then(function(r){ return r.json(); }).catch(function(){ return {}; }), new Promise(function(res){ setTimeout(function(){ res({}); }, 10000); })]) : Promise.resolve({});
+      /* CRM приняла — сразу благодарим; почта (запасной канал) досылается в фоне */
+      crm.then(function(okC){ return okC ? { j:{ success:'true' }, okC:true } : mail.then(function(j){ return { j:j, okC:false }; }); })
         .then(function(x){ var j = x.j;
           if (String(j.success) !== 'true' && !x.okC){ try { console.warn('FormSubmit:', j.message); } catch(e4){} throw (j && j.message) || 'нет ответа'; }
           var log = ls('dm_leads') || []; log.push({ t:Date.now(), p:d }); ls('dm_leads', log);
-          goal('lead');
           try { sessionStorage.setItem('dm_last', JSON.stringify({ title:title, extra:extra ? extra() : null })); } catch(e3){}
-          done(f, false);
+          var gone = false, go = function(){ if (!gone){ gone = true; done(f, false); } };
+          try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', 'lead', {}, go); } catch(e5){}
+          setTimeout(go, 1200);   /* цель «Заявка» успевает уйти в Метрику до перехода на «Спасибо» */
         })
         .catch(function(er){ btn.disabled = false; msg.className = 'lf-msg'; msg.innerHTML = 'Не получилось отправить. Позвоните нам: <a href="' + TEL + '">' + esc(PHONE) + '</a>' + (/debug/.test(location.search) ? '<br><small>Причина: ' + esc(er && er.message || er) + '</small>' : ''); });
     });
