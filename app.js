@@ -24,6 +24,12 @@
     var a = e.target.closest && e.target.closest('[data-goal]'); if (a) goal(a.dataset.goal);
   });
 
+  /* заявка сразу в CRM Домилия Про (адрес задаётся в админке лендинга) */
+  function toCRM(url, d){ if (!url) return Promise.resolve(false); var skip = { _subject:1, _template:1, _captcha:1, _honey:1, 'Имя':1, 'Телефон':1 }, com = [], b = { name:(d['Имя'] && d['Имя'] !== '—') ? d['Имя'] : '', phone:d['Телефон'] || '', page:location.href };
+    Object.keys(d).forEach(function(k){ if (skip[k]) return; if (/^utm_|^yclid$/.test(k)) { b[k] = d[k]; return; } if (d[k] !== '' && d[k] != null) com.push(k + ': ' + d[k]); });
+    try { var u = JSON.parse(sessionStorage.getItem('dm_utm') || '{}'); Object.keys(u).forEach(function(k){ if (!b[k]) b[k] = u[k]; }); } catch(e){}
+    b.comment = com.join('\n'); return fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(b) }).then(function(r){ return r.ok; }).catch(function(){ return false; }); }
+
   /* метки рекламы: запоминаем на время визита и отправляем с заявкой */
   var UTM = {};
   try {
@@ -62,7 +68,7 @@
   }
   function form(btnText, lead, title, extra){
     var f = document.createElement('form'); f.className = 'lf'; f.noValidate = true;
-    if (!C.to){
+    if (!C.to && !C.crm){
       f.innerHTML = '<p class="lf-note">Позвоните — инженер ответит на вопросы и договорится о бесплатном замере.</p><a class="btn wide" href="' + TEL + '" data-goal="lp_call">Позвонить ' + esc(PHONE) + '</a><div class="lf-alt">' + esc(C.hours || '') + '</div>';
       return f;
     }
@@ -98,10 +104,11 @@
       var data = Object.assign({ _subject:'Заявка с remont.domilia.ru — ' + title, _template:'table', _captcha:'false', _honey:'',
         'Заявка':title, 'Телефон':ph.value, 'Имя':f.name.value.trim() || '—', 'Страница':location.href, 'Откуда пришёл':ref,
         'Время на сайте':Math.round((Date.now() - T0) / 1000) + ' сек' }, extra ? extra() : {}, UTM);
-      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(C.to), { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body:JSON.stringify(data) })
-        .then(function(r){ return r.json(); })
-        .then(function(j){
-          if (String(j.success) !== 'true'){ try { console.warn('FormSubmit:', j.message); } catch(e4){} throw (j && j.message) || 'нет ответа'; }
+      var crm = toCRM(C.crm, data);
+      (C.to ? fetch('https://formsubmit.co/ajax/' + encodeURIComponent(C.to), { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body:JSON.stringify(data) }).then(function(r){ return r.json(); }).catch(function(){ return {}; }) : Promise.resolve({}))
+        .then(function(j){ return crm.then(function(okC){ return { j:j, okC:okC }; }); })
+        .then(function(x){ var j = x.j;
+          if (String(j.success) !== 'true' && !x.okC){ try { console.warn('FormSubmit:', j.message); } catch(e4){} throw (j && j.message) || 'нет ответа'; }
           var log = ls('dm_leads') || []; log.push({ t:Date.now(), p:d }); ls('dm_leads', log);
           goal('lead');
           try { sessionStorage.setItem('dm_last', JSON.stringify({ title:title, extra:extra ? extra() : null })); } catch(e3){}
