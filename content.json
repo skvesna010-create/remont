@@ -18,7 +18,8 @@
   "mainSite": "https://domilia.ru/",
   "privacyUrl": "https://domilia.ru/privacy.html",
   "consentUrl": "https://domilia.ru/soglasie.html",
-  "headerBtn": "Рассчитать стоимость"
+  "headerBtn": "Рассчитать стоимость",
+  "crm": "https://api.domilia.ru/lead/lXMk87fw2FItlO-4"
  },
  "seo": {
   "title": "Ремонт квартир под ключ в Екатеринбурге — цена в договоре | Домилия",
