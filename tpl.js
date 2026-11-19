@@ -43,7 +43,7 @@
       '<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="Домилия">\n' +
       '<meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">' + (S.ogImage ? '<meta property="og:image" content="' + esc(S.ogImage) + '">' : '') + '\n' +
       '<meta name="theme-color" content="#16191B">\n' +
-      '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23141618%22/%3E%3Cpath d=%22M14 50V24l18-10 18 10v26H38V34H26v16z%22 fill=%22%2300B47E%22/%3E%3C/svg%3E">\n' +
+      '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" type="image/png" sizes="120x120" href="/favicon-120x120.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
       '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
       '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">\n' +
       '<link rel="stylesheet" href="/style.css?v=' + v(C) + '">\n</head>\n';
