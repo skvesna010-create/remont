@@ -147,51 +147,69 @@
       return { lo:w * sp[0], hi:w * sp[1], weeks:Math.max(3, Math.round((dd[0] + dd[1] * S.area) / 7)) };
     };
     var weeksText = function(w){ var m = w % 100, l = w % 10; if (m > 10 && m < 20) return w + ' недель'; if (l === 1) return w + ' неделя'; if (l > 1 && l < 5) return w + ' недели'; return w + ' недель'; };
-    var render = function(){
-      var st = STEPS[step];
-      stepT.textContent = 'Вопрос ' + (step + 1) + ' из ' + STEPS.length;
-      bar.style.width = (step / STEPS.length * 100) + '%';
-      var h = '<div class="qz-q">' + esc(st.q) + '</div>' + (st.hint ? '<div class="qz-hint">' + esc(st.hint) + '</div>' : '') + '<div class="opts ' + (st.cls || '') + '">';
-      st.o.forEach(function(o, i){
-        var onC = S[st.k] === o.v ? ' on' : '';
-        var extra = '';
-        if (o.img) h += '<button type="button" class="opt ph' + onC + '" data-i="' + i + '"><img src="' + esc(o.img) + '" alt="" loading="lazy"><span>' + esc(o.t) + (o.s ? '<small>' + esc(o.s) + '</small>' : '') + '</span></button>';
-        else h += '<button type="button" class="opt' + onC + '" data-i="' + i + '"><span>' + esc(o.t) + (o.s ? '<small>' + esc(o.s) + '</small>' : '') + '</span>' + extra + '</button>';
-      });
-      h += '</div><div class="qz-nav"><button type="button" class="qz-back"' + (step ? '' : ' hidden') + '>← Назад</button><small>' + esc(Q.note || '') + '</small></div>';
-      body.innerHTML = h;
-      $$('.opt', body).forEach(function(b){ b.onclick = function(){ pick(st, st.o[+b.dataset.i], b); }; });
-      $('.qz-back', body).onclick = function(){ if (step){ step--; render(); } };
+    /* квиз-переписка с менеджером */
+    var MGR = Q.manager || 'Андрей', box = body.closest('.qz'), qh = $('.qz-h', box);
+    if (qh) qh.innerHTML = '<div class="mg"><i class="mg-a">' + esc(MGR.charAt(0)) + '</i><div><b>' + esc(MGR) + '</b><small>менеджер Домилии · расчёт стоимости</small></div></div><span id="qzStep">Вопрос 1 из ' + STEPS.length + '</span>';
+    stepT = $('#qzStep');
+    body.innerHTML = '<div class="ch" id="chLog"></div><div class="ch-o" id="chOpt"></div>';
+    var log = $('#chLog'), opt = $('#chOpt'), busy = false;
+    var scroll = function(){ log.scrollTop = log.scrollHeight; };
+    var say = function(html, cls){ var d = document.createElement('div'); d.className = 'cm ' + (cls || 'm'); d.innerHTML = html; log.appendChild(d); scroll(); return d; };
+    var typing = function(ms, then){ var t = say('<span class="dots"><i></i><i></i><i></i></span>', 'm ty'); setTimeout(function(){ t.remove(); then(); }, ms); };
+    var REACT = {
+      flat:{ 'new':'Новостройка — отлично, сделаем всё с нуля.', 'old':'Понял, вторичка — уберём старое и сделаем как новое.' },
+      kind:{ cap:'Под ключ — самый частый выбор: всё сделаем сами, от черновых работ до уборки.', design:'По дизайн-проекту — красиво получится. Дизайн-проект при таком ремонте в подарок 🎁' },
+      bath:{ yes:'Хорошо, санузел тоже возьмём — с гидроизоляцией и гарантией.', no:'Понял, только комнаты.' }
     };
-    var pick = function(st, o, b){
+    var ask = function(){
+      var st = STEPS[step]; stepT.textContent = 'Вопрос ' + (step + 1) + ' из ' + STEPS.length; bar.style.width = (step / STEPS.length * 100) + '%';
+      typing(step ? 650 : 500, function(){
+        say(esc(st.q) + (st.hint ? '<small>' + esc(st.hint) + '</small>' : ''));
+        var h = '<div class="opts ' + (st.cls || '') + '">';
+        st.o.forEach(function(o, i){
+          if (o.img) h += '<button type="button" class="opt ph" data-i="' + i + '"><img src="' + esc(o.img) + '" alt="" loading="lazy"><span>' + esc(o.t) + (o.s ? '<small>' + esc(o.s) + '</small>' : '') + '</span></button>';
+          else h += '<button type="button" class="opt" data-i="' + i + '"><span>' + esc(o.t) + (o.s ? '<small>' + esc(o.s) + '</small>' : '') + '</span></button>';
+        });
+        opt.innerHTML = h + '</div>' + (step ? '<button type="button" class="qz-back">← Назад</button>' : '');
+        $$('.opt', opt).forEach(function(b){ b.onclick = function(){ pick(st, st.o[+b.dataset.i]); }; });
+        var bk = $('.qz-back', opt); if (bk) bk.onclick = back;
+        if (innerWidth < 980 && started){ var rr = opt.getBoundingClientRect(); if (rr.bottom > innerHeight) opt.scrollIntoView({ behavior:'smooth', block:'end' }); }
+      });
+    };
+    var back = function(){ if (busy || !step) return; step--; var L = $$('.cm', log); L.slice(-3).forEach(function(x){ x.remove(); }); opt.innerHTML = ''; ask(); };
+    var pick = function(st, o){
+      if (busy) return; busy = true;
       if (!started){ started = true; goal('lp_quiz_start'); }
       S[st.k] = o.v; if (st.k === 'rooms') S.area = o.a;
-      $$('.opt', body).forEach(function(x){ x.classList.toggle('on', x === b); });
-      setTimeout(function(){
-        step++;
-        if (step < STEPS.length) render(); else { stepT.textContent = 'Считаем…'; bar.style.width = '85%'; body.innerHTML = '<div class="qz-calc"><i></i><b>Собираем ваш расчёт</b><small>сверяем цены работ и материалов по вашей квартире…</small></div>'; setTimeout(result, 1300); }
-        if (innerWidth < 980){ var r = $('#calc').getBoundingClientRect(); if (r.top < 0) $('#calc').scrollIntoView({ behavior:'smooth' }); }
-      }, 200);
+      opt.innerHTML = ''; say(esc(o.t), 'u');
+      var r = (REACT[st.k] || {})[o.v] || (st.k === 'rooms' ? 'Понял, ' + o.t.toLowerCase() + '.' : st.k === 'when' ? 'Записал.' : '');
+      step++;
+      var next = function(){ busy = false; if (step < STEPS.length) ask(); else qzCalc(); };
+      if (r) typing(600, function(){ say(esc(r)); next(); }); else next();
+    };
+    var qzCalc = function(){
+      stepT.textContent = 'Считаем…'; bar.style.width = '88%';
+      typing(400, function(){ say('Секунду, считаю стоимость по вашей квартире…'); typing(1500, result); });
     };
     var result = function(){
       goal('lp_quiz_done');
-      var p = price(), gift = S.kind === 'design' || S.kind === 'cap';
-      stepT.textContent = 'Последний шаг'; bar.style.width = '92%';
-      var flat = S.flat === 'old' ? 'вторичка' : 'новостройка', room = (Q.rooms[+S.rooms] || {}).t || '', how = 'Звонок';
-      var chips = ['Звонок', 'WhatsApp', 'MAX', 'SMS'];
-      body.innerHTML = '<div class="qz-done"><span>✓</span><div><b>Расчёт готов</b><small>Ремонт: ' + esc((KIND[S.kind] || '').toLowerCase()) + ' · ' + esc(room.toLowerCase()) + ' · ' + flat + (S.bath === 'yes' ? ' · с санузлом' : '') + '</small></div></div>' +
-        '<div class="qz-q">' + esc(Q.askTitle || 'Куда прислать стоимость и подробную смету?') + '</div>' +
-        '<div class="qz-how">' + chips.map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' +
-        (gift ? '<div class="qz-gift">🎁 ' + esc(Q.giftText || 'Дизайн-проект в подарок — закрепим за вами после расчёта') + '</div>' : '');
-      $$('.qz-how button', body).forEach(function(b){ b.onclick = function(){ how = b.textContent; $$('.qz-how button', body).forEach(function(x){ x.classList.toggle('on', x === b); }); }; });
-      body.appendChild(form(Q.btn || 'Узнать стоимость', Q.formLead, 'Расчёт стоимости (квиз)', function(){
-        return { 'Квартира':flat, 'Комнаты':room + ' (~' + S.area + ' м²)', 'Ремонт':KIND[S.kind], 'Санузел':S.bath === 'yes' ? 'да' : 'нет', 'Когда начать':S.when, 'Как связаться':how, 'Расчёт':money(p.lo) + ' – ' + money(p.hi) + ' ₽', 'Срок':'около ' + weeksText(p.weeks) };
-      }));
-      var back = document.createElement('button'); back.type = 'button'; back.className = 'qz-back'; back.style.marginTop = '10px'; back.textContent = '← Изменить ответы';
-      back.onclick = function(){ step = STEPS.length - 1; render(); }; body.appendChild(back);
+      var p = price(), gift = S.kind === 'design' || S.kind === 'cap', how = 'Звонок';
+      stepT.textContent = 'Последний шаг'; bar.style.width = '94%';
+      var flat = S.flat === 'old' ? 'вторичка' : 'новостройка', room = (Q.rooms[+S.rooms] || {}).t || '';
+      say('<b>Расчёт готов ✓</b><small>Ремонт: ' + esc((KIND[S.kind] || '').toLowerCase()) + ' · ' + esc(room.toLowerCase()) + ' · ' + flat + (S.bath === 'yes' ? ' · с санузлом' : '') + '</small>');
+      typing(700, function(){
+        say('Куда вам отправить стоимость и подробную смету? Оставьте номер — покажу цену сразу, а подробную смету пришлю удобным способом.');
+        opt.innerHTML = '<div class="qz-how">' + ['Звонок', 'WhatsApp', 'MAX', 'SMS'].map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' + (gift ? '<div class="qz-gift">🎁 ' + esc(Q.giftText || '') + '</div>' : '');
+        $$('.qz-how button', opt).forEach(function(b){ b.onclick = function(){ how = b.textContent; $$('.qz-how button', opt).forEach(function(x){ x.classList.toggle('on', x === b); }); }; });
+        opt.appendChild(form(Q.btn || 'Узнать стоимость', '', 'Расчёт стоимости (квиз)', function(){
+          return { 'Квартира':flat, 'Комнаты':room + ' (~' + S.area + ' м²)', 'Ремонт':KIND[S.kind], 'Санузел':S.bath === 'yes' ? 'да' : 'нет', 'Когда начать':S.when, 'Как связаться':how, 'Расчёт':money(p.lo) + ' – ' + money(p.hi) + ' ₽', 'Срок':'около ' + weeksText(p.weeks) };
+        }));
+        var ph = $('input[type=tel]', opt); if (ph && innerWidth > 980) ph.focus();
+      });
     };
     $$('[data-kind]').forEach(function(a){ a.addEventListener('click', function(){ S.kind = a.dataset.kind; goal('lp_price_click'); }); });
-    render();
+    say('Здравствуйте! Я ' + esc(MGR) + ', менеджер Домилии 👋');
+    setTimeout(function(){ typing(600, function(){ say('Посчитаю стоимость ремонта вашей квартиры — 5 коротких вопросов, займёт минуту.'); ask(); }); }, 300);
   }
 
   /* форма записи на замер внизу */
