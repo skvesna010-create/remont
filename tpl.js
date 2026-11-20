@@ -44,8 +44,8 @@
       '<meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">' + (S.ogImage ? '<meta property="og:image" content="' + esc(S.ogImage) + '">' : '') + '\n' +
       '<meta name="theme-color" content="#16191B">\n' +
       '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" type="image/png" sizes="120x120" href="/favicon-120x120.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
-      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-      '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">\n' +
+      '<link rel="preload" href="/fonts/montserrat-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/montserrat-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>\n' +
+      '<style>' + [400, 500, 600, 700, 800].map(function(w){ return ['cyrillic', 'U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116', 'latin', 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'].reduce(function(a, x, i, L){ if (i % 2) return a; return a + '@font-face{font-family:Montserrat;font-style:normal;font-weight:' + w + ';font-display:swap;src:url(/fonts/montserrat-' + x + '-' + w + '-normal.woff2) format("woff2");unicode-range:' + L[i + 1] + '}'; }, ''); }).join('') + '</style>\n' +
       '<link rel="stylesheet" href="/style.css?v=' + v(C) + '">\n<meta name="yandex-verification" content="8f62ce537b893b64" /></head>\n';
   }
 
