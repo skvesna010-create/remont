@@ -154,7 +154,7 @@
       var h = '<div class="qz-q">' + esc(st.q) + '</div>' + (st.hint ? '<div class="qz-hint">' + esc(st.hint) + '</div>' : '') + '<div class="opts ' + (st.cls || '') + '">';
       st.o.forEach(function(o, i){
         var onC = S[st.k] === o.v ? ' on' : '';
-        var extra = st.k === 'kind' && Q.rates[o.v] ? '<em>от ' + (+Q.rates[o.v]).toLocaleString('ru-RU') + ' ₽/м²</em>' : '';
+        var extra = '';
         if (o.img) h += '<button type="button" class="opt ph' + onC + '" data-i="' + i + '"><img src="' + esc(o.img) + '" alt="" loading="lazy"><span>' + esc(o.t) + (o.s ? '<small>' + esc(o.s) + '</small>' : '') + '</span></button>';
         else h += '<button type="button" class="opt' + onC + '" data-i="' + i + '"><span>' + esc(o.t) + (o.s ? '<small>' + esc(o.s) + '</small>' : '') + '</span>' + extra + '</button>';
       });

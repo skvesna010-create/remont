@@ -46,7 +46,7 @@
       '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" type="image/png" sizes="120x120" href="/favicon-120x120.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
       '<link rel="preload" href="/fonts/montserrat-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/montserrat-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>\n' +
       '<style>' + [400, 500, 600, 700, 800].map(function(w){ return ['cyrillic', 'U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116', 'latin', 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'].reduce(function(a, x, i, L){ if (i % 2) return a; return a + '@font-face{font-family:Montserrat;font-style:normal;font-weight:' + w + ';font-display:swap;src:url(/fonts/montserrat-' + x + '-' + w + '-normal.woff2) format("woff2");unicode-range:' + L[i + 1] + '}'; }, ''); }).join('') + '</style>\n' +
-      '<link rel="stylesheet" href="/style.css?v=' + v(C) + '">\n<meta name="yandex-verification" content="8f62ce537b893b64" /></head>\n';
+      '<link rel="stylesheet" href="/style.css?v=' + v(C) + '"><link rel="preload" href="/app.js?v=' + v(C) + '" as="script">' + ((C.quiz || {}).flat || []).map(function(x){ return '<link rel="preload" href="' + esc(x.img) + '" as="image">'; }).join('') + '\n<meta name="yandex-verification" content="8f62ce537b893b64" /></head>\n';
   }
 
   function msgrs(C, cls){
@@ -83,6 +83,7 @@
   function tag(t, style){ return t ? '<div class="tag"' + (style ? ' style="' + style + '"' : '') + '>' + esc(t) + '</div>' : ''; }
   function secH(x){ return '<div class="sec-h rv">' + tag(x.tag) + '<h2>' + esc(x.title) + '</h2>' + (x.sub ? '<p>' + md(x.sub) + '</p>' : '') + '</div>'; }
 
+  function qz1(C){ var Q = C.quiz || {}; return '<div class="qz-q">Какая у вас квартира?</div><div class="opts c2">' + (Q.flat || []).map(function(x){ return '<button type="button" class="opt ph"><img src="' + esc(x.img) + '" alt="" width="320" height="240"><span>' + esc(x.t) + (x.s ? '<small>' + esc(x.s) + '</small>' : '') + '</span></button>'; }).join('') + '</div><div class="qz-nav"><small>' + esc(Q.note || '') + '</small></div>'; }
   /* ---------- главная ---------- */
   function hero(C){
     var H = C.hero || {}, Q = C.quiz || {};
@@ -93,7 +94,7 @@
       ((H.facts || []).length ? '      <div class="facts">' + H.facts.map(function(f){ return '<div><b>' + esc(f.b) + '</b><span>' + esc(f.t) + '</span></div>'; }).join('') + '</div>\n' : '') +
       (H.gift ? '      <div class="gift-strip"><svg viewBox="0 0 32 32" fill="none" stroke="#1FE6AA" stroke-width="2" stroke-linejoin="round"><rect x="5" y="12" width="22" height="15" rx="2"/><path d="M3 8h26v4H3zM16 8v19M16 8c-2-5-8-5-7-1s7 1 7 1zm0 0c2-5 8-5 7-1s-7 1-7 1z"/></svg><p>' + md(H.gift) + '</p></div>\n' : '') +
       '    </div>\n    <div class="qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '      <div class="qz-b" id="qzBody"><noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel((C.settings || {}).phone) + '">' + esc((C.settings || {}).phone) + '</a></p></noscript></div>\n    </div>\n  </div>\n</section>\n';
+      '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel((C.settings || {}).phone) + '">' + esc((C.settings || {}).phone) + '</a></p></noscript></div>\n    </div>\n  </div>\n</section>\n';
   }
   function prices(C){
     var P = C.prices; if (!on(P)) return '';
@@ -205,7 +206,7 @@
       '<main class="kv-m">\n  <div class="kv-bg" aria-hidden="true" style="background-image:url(' + img(H.bg) + ')"></div>\n  <div class="w kv-w">\n' +
       '    <h1>Сколько стоит ремонт <em>вашей</em> квартиры?</h1>\n    <p class="kv-sub">5 вопросов — меньше минуты. Цену закрепим в договоре.</p>\n' +
       '    <div class="qz kv-qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '      <div class="qz-b" id="qzBody"><noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n    </div>\n' +
+      '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n    </div>\n' +
       ((H.facts || []).length ? '    <div class="kv-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') +
       '  </div>\n</main>\n' + cookie(C) + config(C, 'kviz') + '</body>\n</html>\n';
   }
