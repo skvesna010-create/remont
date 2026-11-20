@@ -217,8 +217,8 @@
   if (fin){ fin.innerHTML = ''; fin.appendChild(form(C.finalBtn || 'Жду звонка', '', 'Бесплатный замер')); }
 
   /* ---------- видео-знакомство (вариант B): по нажатию, со звуком ---------- */
-  var vv = $('#vbVid'), vp = $('.vb2-play');
-  if (vv && vp){ vp.onclick = function(){ vp.hidden = true; vv.controls = true; try { vv.play(); } catch(e){} }; vv.addEventListener('play', function(){ vp.hidden = true; goal('lp_video', true); }); }
+  var vidEl = $('#vbVid'), vidBtn = $('.vb2-play');
+  if (vidEl && vidBtn){ vidBtn.onclick = function(){ vidBtn.hidden = true; vidEl.controls = true; vidEl.preload = 'auto'; try { var pr = vidEl.play(); if (pr && pr.catch) pr.catch(function(){}); } catch(e){} }; vidEl.addEventListener('play', function(){ vidBtn.hidden = true; goal('lp_video', true); }); }
 
   /* ---------- окно объекта ---------- */
   var OBJ = C.objects || [];

@@ -446,8 +446,8 @@
     "show": true,
     "tag": "Знакомство · 50 секунд",
     "title": "Кто мы и как работаем",
-    "video": "https://domilia.ru/media/domilia-video.mp4",
-    "poster": "https://domilia.ru/media/domilia-video-poster.jpg",
+    "video": "/media/domilia-video-720.mp4",
+    "poster": "/media/video-poster.jpg",
     "items": [
       "Дизайн-проект: сначала рисуем, потом строим",
       "Ремонт: черновые и чистовые работы",
