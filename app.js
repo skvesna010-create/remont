@@ -16,7 +16,7 @@
   /* ---------- Яндекс Метрика и цели ---------- */
   if (C.ym){
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r)return;}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
-    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page } });
   }
   var sent = {};
   function goal(n, once){ if (once && sent[n]) return; sent[n] = 1; try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', n); } catch(e){} }
@@ -169,7 +169,7 @@
       $$('.opt', body).forEach(function(x){ x.classList.toggle('on', x === b); });
       setTimeout(function(){
         step++;
-        if (step < STEPS.length) render(); else result();
+        if (step < STEPS.length) render(); else { stepT.textContent = 'Считаем…'; bar.style.width = '85%'; body.innerHTML = '<div class="qz-calc"><i></i><b>Собираем ваш расчёт</b><small>сверяем цены работ и материалов по вашей квартире…</small></div>'; setTimeout(result, 1300); }
         if (innerWidth < 980){ var r = $('#calc').getBoundingClientRect(); if (r.top < 0) $('#calc').scrollIntoView({ behavior:'smooth' }); }
       }, 200);
     };

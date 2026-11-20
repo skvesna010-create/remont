@@ -2,6 +2,8 @@
 const fs = require('fs'), T = require('./tpl.js');
 const C = JSON.parse(fs.readFileSync(__dirname + '/content.json', 'utf8'));
 fs.writeFileSync(__dirname + '/index.html', T.page(C));
+fs.mkdirSync(__dirname + '/v2', { recursive:true });
+fs.writeFileSync(__dirname + '/v2/index.html', T.pageB(C));
 fs.mkdirSync(__dirname + '/kviz', { recursive:true });
 fs.writeFileSync(__dirname + '/kviz/index.html', T.quizPage(C));
 fs.mkdirSync(__dirname + '/spasibo', { recursive:true });

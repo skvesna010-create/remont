@@ -195,7 +195,7 @@
 
   function page(C){
     var host = 'https://remont.domilia.ru/';
-    return head(C, { canonical:host }) + '<body>\n' + header(C) + '<main>\n' + hero(C) + prices(C) + objects(C) + reviews(C) + gift(C) + film(C) + steps(C) + team(C) + why(C) + faq(C) + finalB(C) + '</main>\n' +
+    return head(C, { canonical:host }).replace('</head>', '<script>(function(){try{if(/[?&]ab=a/.test(location.search))return;var k="dm_ab",v=localStorage.getItem(k);if(/[?&]ab=b/.test(location.search))v="b";if(!v){v=Math.random()<.5?"a":"b";localStorage.setItem(k,v);}if(v==="b")location.replace("/v2/"+location.search+location.hash);}catch(e){}})()</script></head>') + '<body>\n' + header(C) + '<main>\n' + hero(C) + prices(C) + objects(C) + reviews(C) + gift(C) + film(C) + steps(C) + team(C) + why(C) + faq(C) + finalB(C) + '</main>\n' +
       footer(C) + mbar(C) + cookie(C) + config(C, 'main') + '</body>\n</html>\n';
   }
 
@@ -209,6 +209,19 @@
       '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n    </div>\n' +
       ((H.facts || []).length ? '    <div class="kv-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') +
       '  </div>\n</main>\n' + cookie(C) + config(C, 'kviz') + '</body>\n</html>\n';
+  }
+
+  /* ---------- вариант B: видео → квиз → объекты → видео целиком → шаги → заявка ---------- */
+  function pageB(C){
+    var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
+    return head(C, { title:(C.seo || {}).title, desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="vb">\n' + header(C) + '<main>\n' +
+      '<section class="vb-hero">\n  <video class="vb-v" autoplay muted loop playsinline preload="auto" poster="/media/hero-poster.jpg"><source src="/media/hero-loop.mp4" type="video/mp4"></video><div class="vb-sh"></div>\n' +
+      '  <div class="w vb-w">\n    <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n    <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n    <p class="vb-sub">Узнайте стоимость своей квартиры за минуту — 5 вопросов, без регистрации.</p>\n' +
+      '    <a class="btn glow vb-go" href="#calc" data-goal="lp_cta_video">Рассчитать стоимость ↓</a>\n' +
+      ((H.facts || []).length ? '    <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '  </div>\n</section>\n' +
+      '<section class="vb-qs" id="calcSec">\n  <div class="w vb-qw">\n    <div class="qz kv-qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
+      '      <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n    </div>\n' + (H.gift ? '    <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '  </div>\n</section>\n' +
+      objects(C) + film(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
   }
 
   /* ---------- спасибо ---------- */
@@ -235,7 +248,7 @@
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
-  var LPT = { page:page, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  var LPT = { page:page, pageB:pageB, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
   root.LPT = LPT;
   if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
 })(typeof window !== 'undefined' ? window : this);
