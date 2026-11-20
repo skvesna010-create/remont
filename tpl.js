@@ -163,7 +163,7 @@
   }
 
   function stars(n){ n = Math.max(0, Math.min(5, Math.round(+n || 5))); return '<span class="stars" aria-label="Оценка ' + n + ' из 5">' + '★★★★★'.slice(0, n) + '<i>' + '★★★★★'.slice(n) + '</i></span>'; }
-  var SRC = { yandex:'Яндекс Карты', '2gis':'2ГИС', avito:'Авито', vk:'ВКонтакте', site:'Отзыв клиента' };
+  var SRC = { yandex:'Яндекс Карты', '2gis':'2ГИС', avito:'Авито', vk:'ВКонтакте', site:'Отзыв клиента', phone:'Со слов клиента по телефону' };
   function reviews(C){
     var R = C.reviews; if (!on(R)) return '';
     var L = (R.items || []).filter(function(r){ return r && r.text && r.name; });
@@ -174,7 +174,7 @@
       '    <div class="rvs" id="rvList">' + L.map(function(r){
         var src = SRC[r.source] || r.source || '';
         return '<article class="rw rv"><div class="rw-h">' + (r.photo ? '<img src="' + img(r.photo) + '" alt="" loading="lazy">' : '<i class="av">' + esc(String(r.name).trim().charAt(0).toUpperCase()) + '</i>') +
-          '<div><b>' + esc(r.name) + '</b>' + (r.place ? '<small>' + esc(r.place) + '</small>' : '') + '</div>' + stars(r.stars) + '</div>' +
+          '<div><b>' + esc(r.name) + '</b>' + (r.place ? '<small>' + esc(r.place) + '</small>' : '') + '</div>' + (r.stars ? stars(r.stars) : '') + '</div>' +
           (r.work ? '<div class="rw-w">' + esc(r.work) + '</div>' : '') + '<p>' + md(r.text) + '</p>' +
           '<div class="rw-f">' + (r.date ? '<span>' + esc(r.date) + '</span>' : '<span></span>') + (src ? (r.link ? '<a href="' + esc(r.link) + '" target="_blank" rel="noopener">' + esc(src) + ' ↗</a>' : '<span>' + esc(src) + '</span>') : '') + '</div></article>';
       }).join('') + '</div>\n' + (links ? '    <div class="rw-l rv">' + links + '</div>\n' : '') + '  </div>\n</section>\n';
@@ -220,7 +220,7 @@
       ((H.facts || []).length ? '      <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '    </div>\n' +
       '    <div class="vb2-r">\n      <div class="qz" id="calc" aria-live="polite">\n        <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n        <div class="qz-bar"><i id="qzBar"></i></div>\n' +
       '        <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n      </div>\n' + (H.gift ? '      <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '    </div>\n  </div>\n</section>\n' +
-      objects(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
+      objects(C) + reviews(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
   }
 
   /* ---------- спасибо ---------- */
