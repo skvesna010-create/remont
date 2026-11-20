@@ -175,15 +175,17 @@
     };
     var result = function(){
       goal('lp_quiz_done');
-      var p = price(), gift = S.kind !== 'cosm';
-      stepT.textContent = 'Готово!'; bar.style.width = '100%';
-      var flat = S.flat === 'old' ? 'вторичка' : 'новостройка', room = (Q.rooms[+S.rooms] || {}).t || '';
-      body.innerHTML = '<div class="res-l">' + esc(Q.resultLabel || 'Примерная стоимость работ') + '</div>' +
-        '<div class="res-p">' + money(p.lo) + ' – ' + money(p.hi) + ' ₽</div>' +
-        '<div class="res-n">' + esc(KIND[S.kind] || '') + ' ремонт · ' + esc(room.toLowerCase()) + ' · ' + flat + (S.bath === 'yes' ? ' · с санузлом' : '') + '</div>' +
-        '<div class="res-row"><span>Срок: около ' + weeksText(p.weeks) + '</span>' + (gift ? '<span class="g">+ дизайн-проект в подарок</span>' : '<span class="g">Замер и смета — бесплатно</span>') + '</div>';
-      body.appendChild(form(Q.btn || 'Получить точную смету', Q.formLead, 'Расчёт стоимости', function(){
-        return { 'Квартира':flat, 'Комнаты':room + ' (~' + S.area + ' м²)', 'Ремонт':KIND[S.kind], 'Санузел':S.bath === 'yes' ? 'да' : 'нет', 'Когда начать':S.when, 'Расчёт':money(p.lo) + ' – ' + money(p.hi) + ' ₽' };
+      var p = price(), gift = S.kind === 'design' || S.kind === 'cap';
+      stepT.textContent = 'Последний шаг'; bar.style.width = '92%';
+      var flat = S.flat === 'old' ? 'вторичка' : 'новостройка', room = (Q.rooms[+S.rooms] || {}).t || '', how = 'Звонок';
+      var chips = ['Звонок', 'WhatsApp', 'MAX', 'SMS'];
+      body.innerHTML = '<div class="qz-done"><span>✓</span><div><b>Расчёт готов</b><small>Ремонт: ' + esc((KIND[S.kind] || '').toLowerCase()) + ' · ' + esc(room.toLowerCase()) + ' · ' + flat + (S.bath === 'yes' ? ' · с санузлом' : '') + '</small></div></div>' +
+        '<div class="qz-q">' + esc(Q.askTitle || 'Куда прислать стоимость и подробную смету?') + '</div>' +
+        '<div class="qz-how">' + chips.map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' +
+        (gift ? '<div class="qz-gift">🎁 ' + esc(Q.giftText || 'Дизайн-проект в подарок — закрепим за вами после расчёта') + '</div>' : '');
+      $$('.qz-how button', body).forEach(function(b){ b.onclick = function(){ how = b.textContent; $$('.qz-how button', body).forEach(function(x){ x.classList.toggle('on', x === b); }); }; });
+      body.appendChild(form(Q.btn || 'Узнать стоимость', Q.formLead, 'Расчёт стоимости (квиз)', function(){
+        return { 'Квартира':flat, 'Комнаты':room + ' (~' + S.area + ' м²)', 'Ремонт':KIND[S.kind], 'Санузел':S.bath === 'yes' ? 'да' : 'нет', 'Когда начать':S.when, 'Как связаться':how, 'Расчёт':money(p.lo) + ' – ' + money(p.hi) + ' ₽', 'Срок':'около ' + weeksText(p.weeks) };
       }));
       var back = document.createElement('button'); back.type = 'button'; back.className = 'qz-back'; back.style.marginTop = '10px'; back.textContent = '← Изменить ответы';
       back.onclick = function(){ step = STEPS.length - 1; render(); }; body.appendChild(back);

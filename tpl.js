@@ -198,6 +198,18 @@
       footer(C) + mbar(C) + cookie(C) + config(C, 'main') + '</body>\n</html>\n';
   }
 
+  /* ---------- квиз на весь экран: без чтения, сразу вопросы ---------- */
+  function quizPage(C){
+    var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
+    return head(C, { title:'Расчёт стоимости ремонта квартиры за 1 минуту — Домилия, Екатеринбург', desc:'Ответьте на 5 вопросов и узнайте стоимость ремонта своей квартиры. Цена в договоре, оплата по этапам.', noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="kv">\n' + header(C, false) +
+      '<main class="kv-m">\n  <div class="kv-bg" aria-hidden="true" style="background-image:url(' + img(H.bg) + ')"></div>\n  <div class="w kv-w">\n' +
+      '    <h1>Сколько стоит ремонт <em>вашей</em> квартиры?</h1>\n    <p class="kv-sub">5 вопросов — меньше минуты. Цену закрепим в договоре.</p>\n' +
+      '    <div class="qz kv-qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
+      '      <div class="qz-b" id="qzBody"><noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n    </div>\n' +
+      ((H.facts || []).length ? '    <div class="kv-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') +
+      '  </div>\n</main>\n' + cookie(C) + config(C, 'kviz') + '</body>\n</html>\n';
+  }
+
   /* ---------- спасибо ---------- */
   function thanks(C){
     var T = C.thanks || {}, s = C.settings || {};
@@ -222,7 +234,7 @@
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
-  var LPT = { page:page, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  var LPT = { page:page, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
   root.LPT = LPT;
   if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
 })(typeof window !== 'undefined' ? window : this);
