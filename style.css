@@ -404,3 +404,13 @@ a.pl-r:hover{background:#FAFEFC}
 @keyframes dt{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}@keyframes cmIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .ch-o{border-top:1px solid #eef1ef;padding-top:10px}.ch-o .opts{margin:0}.ch-o .qz-back{margin-top:8px}
 .vb2-play[hidden]{display:none}
+/* квиз как приложение */
+.qz .qz-b{display:flex;flex-direction:column}
+@media(min-width:760px){.qz .ch{height:300px;max-height:300px}}
+.qz-x{display:none;margin-left:10px;width:36px;height:36px;border-radius:50%;border:0;background:#F1F4F2;font-size:16px;cursor:pointer;flex:none}
+.qz.app{position:fixed;inset:0;z-index:1000;margin:0;border-radius:0;display:flex;flex-direction:column;height:100vh;height:100dvh;padding:calc(10px + env(safe-area-inset-top)) 14px calc(10px + env(safe-area-inset-bottom));box-shadow:none;max-width:none;width:auto}
+.qz.app .qz-h{flex:none;display:flex;align-items:center;gap:8px}.qz.app #qzStep{margin-left:auto;font-size:12px}.qz.app .qz-x{display:flex;align-items:center;justify-content:center}.qz.app .mg small{display:none}
+.qz.app .qz-bar{flex:none}.qz.app .qz-b{flex:1;min-height:0}.qz.app .ch{flex:1;max-height:none;height:auto;min-height:0}.qz.app .ch-o{flex:none;max-height:58vh;overflow-y:auto}
+.qz.app .opts.c2 .opt.ph img{height:96px}
+html.qz-lock,html.qz-lock body{overflow:hidden}
+html.qz-lock .mbar,html.qz-lock .ck{display:none}

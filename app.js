@@ -153,6 +153,14 @@
     stepT = $('#qzStep');
     body.innerHTML = '<div class="ch" id="chLog"></div><div class="ch-o" id="chOpt"></div>';
     var log = $('#chLog'), opt = $('#chOpt'), busy = false;
+    /* режим приложения: на телефоне квиз раскрывается на весь экран, как мессенджер */
+    var MOB = function(){ return innerWidth < 760; }, isApp = false;
+    var cls = document.createElement('button'); cls.type = 'button'; cls.className = 'qz-x'; cls.setAttribute('aria-label', 'Свернуть'); cls.textContent = '✕'; if (qh) qh.appendChild(cls);
+    var openApp = function(){ if (isApp) return; isApp = true; box.classList.add('app'); document.documentElement.classList.add('qz-lock'); try { history.pushState({ qz:1 }, ''); } catch(e){} setTimeout(scroll, 50); goal('lp_quiz_app', true); };
+    var closeApp = function(fromHist){ if (!isApp) return; isApp = false; box.classList.remove('app'); document.documentElement.classList.remove('qz-lock'); if (!fromHist){ try { if (history.state && history.state.qz) history.back(); } catch(e){} } box.scrollIntoView({ block:'start' }); };
+    cls.onclick = function(){ closeApp(); };
+    addEventListener('popstate', function(){ closeApp(true); });
+    $$('a[href$="#calc"]').forEach(function(l){ l.addEventListener('click', function(e){ if (MOB()){ e.preventDefault(); openApp(); } }); });
     var scroll = function(){ log.scrollTop = log.scrollHeight; };
     var say = function(html, cls){ var d = document.createElement('div'); d.className = 'cm ' + (cls || 'm'); d.innerHTML = html; log.appendChild(d); scroll(); return d; };
     var typing = function(ms, then){ var t = say('<span class="dots"><i></i><i></i><i></i></span>', 'm ty'); setTimeout(function(){ t.remove(); then(); }, ms); };
@@ -173,13 +181,14 @@
         opt.innerHTML = h + '</div>' + (step ? '<button type="button" class="qz-back">← Назад</button>' : '');
         $$('.opt', opt).forEach(function(b){ b.onclick = function(){ pick(st, st.o[+b.dataset.i]); }; });
         var bk = $('.qz-back', opt); if (bk) bk.onclick = back;
-        if (innerWidth < 980 && started){ var rr = opt.getBoundingClientRect(); if (rr.bottom > innerHeight) opt.scrollIntoView({ behavior:'smooth', block:'end' }); }
+        if (!isApp && innerWidth < 980 && started){ var rr = opt.getBoundingClientRect(); if (rr.bottom > innerHeight) opt.scrollIntoView({ behavior:'smooth', block:'end' }); }
       });
     };
     var back = function(){ if (busy || !step) return; step--; var L = $$('.cm', log); L.slice(-3).forEach(function(x){ x.remove(); }); opt.innerHTML = ''; ask(); };
     var pick = function(st, o){
       if (busy) return; busy = true;
       if (!started){ started = true; goal('lp_quiz_start'); }
+      if (MOB()) openApp();
       S[st.k] = o.v; if (st.k === 'rooms') S.area = o.a;
       opt.innerHTML = ''; say(esc(o.t), 'u');
       var r = (REACT[st.k] || {})[o.v] || (st.k === 'rooms' ? 'Понял, ' + o.t.toLowerCase() + '.' : st.k === 'when' ? 'Записал.' : '');
