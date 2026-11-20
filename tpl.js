@@ -122,7 +122,7 @@
       L.map(function(p, i){
         return '<button type="button" class="ob rv" data-o="' + i + '"><span class="ob-i"><img src="' + img(p.photos[0]) + '" alt="' + esc(p.title) + '" loading="lazy">' + (p.demo ? '<i class="ob-demo">пример</i>' : '') + '<i class="ob-n">' + p.photos.length + ' фото</i></span>' +
           '<span class="ob-b"><small>' + esc(p.type) + '</small><h3>' + esc(p.title) + '</h3><span class="chips">' + (p.area ? '<span>' + esc(p.area) + ' м²</span>' : '') + (p.days ? '<span>' + esc(p.days) + ' дней</span>' : '') + (p.district ? '<span>' + esc(p.district) + '</span>' : '') + '</span>' +
-          '<span class="ob-p"><strong>' + esc(p.price) + '</strong><em>Смотреть →</em></span></span></button>';
+          '<span class="ob-p">' + (p.price ? '<strong>' + esc(p.price) + '</strong>' : '<strong></strong>') + '<em>Смотреть →</em></span></span></button>';
       }).join('') + '</div>\n  </div>\n</section>\n';
   }
   function gift(C){
@@ -215,13 +215,12 @@
   function pageB(C){
     var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
     return head(C, { title:(C.seo || {}).title, desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="vb">\n' + header(C) + '<main>\n' +
-      '<section class="vb-hero">\n  <video class="vb-v" autoplay muted loop playsinline preload="auto" poster="/media/hero-poster.jpg"><source src="/media/hero-loop.mp4" type="video/mp4"></video><div class="vb-sh"></div>\n' +
-      '  <div class="w vb-w">\n    <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n    <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n    <p class="vb-sub">Узнайте стоимость своей квартиры за минуту — 5 вопросов, без регистрации.</p>\n' +
-      '    <a class="btn glow vb-go" href="#calc" data-goal="lp_cta_video">Рассчитать стоимость ↓</a>\n' +
-      ((H.facts || []).length ? '    <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '  </div>\n</section>\n' +
-      '<section class="vb-qs" id="calcSec">\n  <div class="w vb-qw">\n    <div class="qz kv-qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '      <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n    </div>\n' + (H.gift ? '    <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '  </div>\n</section>\n' +
-      objects(C) + film(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
+      '<section class="vb-hero2">\n  <div class="w vb2">\n    <div class="vb2-l">\n      <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n      <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n      <p class="vb-sub">Узнайте стоимость своей квартиры за минуту — 5 вопросов, без регистрации.</p>\n' +
+      '      <div class="vb2-vid"><video id="vbVid" preload="none" playsinline poster="/media/video-poster.jpg"><source src="' + esc((C.film || {}).video || '') + '" type="video/mp4"></video><button type="button" class="vb2-play" data-goal="lp_video"><i>▶</i><span>Знакомство с Домилией<small>50 секунд, со звуком</small></span></button></div>\n' +
+      ((H.facts || []).length ? '      <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '    </div>\n' +
+      '    <div class="vb2-r">\n      <div class="qz" id="calc" aria-live="polite">\n        <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 5</span></div>\n        <div class="qz-bar"><i id="qzBar"></i></div>\n' +
+      '        <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n      </div>\n' + (H.gift ? '      <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '    </div>\n  </div>\n</section>\n' +
+      objects(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
   }
 
   /* ---------- спасибо ---------- */
@@ -239,12 +238,12 @@
   /* ---------- 404 ---------- */
   function notFound(C){
     var N = C.notFound || {}, P = C.prices || {}, s = C.settings || {};
-    var rows = (P.rows || []).slice(0, 6);
+    var rows = on(P) ? (P.rows || []).slice(0, 6) : [];
     return head(C, { title:'Страница не найдена — ремонт квартир в Екатеринбурге | Домилия', desc:N.text, noindex:true }) + '<body class="pg">\n' + header(C) +
       '<main class="pg-m">\n  <div class="w">\n    <div class="pg-card nf">\n      <div class="nf-code">404</div>\n      <h1>' + esc(N.title) + '</h1>\n      <p class="pg-lead">' + md(N.text) + '</p>\n' +
       '      <div class="pg-act"><a class="btn" href="/#calc">Рассчитать стоимость</a><a class="btn lt" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></div>\n' +
       (rows.length ? '      <div class="nf-pr">' + rows.map(function(r){ return '<a href="/#prices"><b>' + esc(r.name) + '</b><span>' + esc(r.price) + '/м²</span></a>'; }).join('') + '</div>\n' : '') +
-      '      <p class="pg-back"><a href="/">Главная страница</a> · <a href="/#prices">Цены</a> · <a href="/#faq">Вопросы</a> · <a href="' + esc(s.mainSite) + '">domilia.ru</a></p>\n    </div>\n  </div>\n</main>\n' +
+      '      <p class="pg-back"><a href="/">Главная страница</a> · <a href="/#faq">Вопросы</a> · <a href="' + esc(s.mainSite) + '">domilia.ru</a></p>\n    </div>\n  </div>\n</main>\n' +
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
