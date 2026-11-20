@@ -397,7 +397,7 @@ a.pl-r:hover{background:#FAFEFC}
 @media(max-width:980px){.vb2{grid-template-columns:1fr;gap:22px}.vb-hero2{padding:22px 0 34px}}
 /* квиз-переписка с менеджером */
 .mg{display:flex;align-items:center;gap:10px}.mg-a{width:40px;height:40px;border-radius:50%;background:#007A55;color:#fff;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;position:relative;flex:none}.mg-a::after{content:"";position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;background:#1FE6AA;border:2px solid #fff}.mg b{display:block;font-size:15px}.mg small{font-size:12px;color:#667;font-weight:500}
-.ch{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;padding:4px 2px 10px;scroll-behavior:smooth}
+.ch{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;padding:4px 2px 10px;overscroll-behavior:contain}
 .cm{max-width:86%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.4;animation:cmIn .25s ease}.cm small{display:block;color:#667;font-size:13px;margin-top:3px}
 .cm.m{background:#F1F4F2;border-top-left-radius:4px;align-self:flex-start}.cm.u{background:#007A55;color:#fff;border-top-right-radius:4px;align-self:flex-end}
 .dots{display:inline-flex;gap:4px;padding:2px 0}.dots i{width:7px;height:7px;border-radius:50%;background:#9aa6a0;animation:dt 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
@@ -414,3 +414,9 @@ a.pl-r:hover{background:#FAFEFC}
 .qz.app .opts.c2 .opt.ph img{height:96px}
 html.qz-lock,html.qz-lock body{overflow:hidden}
 html.qz-lock .mbar,html.qz-lock .ck{display:none}
+/* компактные ответы в квизе-переписке — вопрос всегда виден */
+.ch-o .opts{display:grid;grid-template-columns:1fr;gap:8px}.ch-o .opts.c2{grid-template-columns:1fr 1fr}
+.ch-o .opt{padding:10px 12px;min-height:0;border-radius:12px;text-align:left}.ch-o .opt span{font-size:15px;line-height:1.25}.ch-o .opt small{font-size:12px;margin-top:2px}
+.ch-o .opt.ph img{height:84px;object-fit:cover}
+.qz.app .ch-o{max-height:52vh}.qz.app .ch-o .opt.ph img{height:78px}
+.qz.app .ch{padding-bottom:6px}
