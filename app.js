@@ -116,7 +116,7 @@
           var log = ls('dm_leads') || []; log.push({ t:Date.now(), p:d }); ls('dm_leads', log);
           try { sessionStorage.setItem('dm_last', JSON.stringify({ title:title, extra:extra ? extra() : null })); } catch(e3){}
           var gone = false, go = function(){ if (!gone){ gone = true; done(f, false); } };
-          try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', 'lead', {}, go); } catch(e5){}
+          try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', bot ? 'lp_bot_lead' : 'lead', {}, go); } catch(e5){}   /* заявку с признаками бота не засчитываем Директу как конверсию */
           setTimeout(go, 1200);   /* цель «Заявка» успевает уйти в Метрику до перехода на «Спасибо» */
         })
         .catch(function(er){ btn.disabled = false; msg.className = 'lf-msg'; msg.innerHTML = 'Не получилось отправить. Позвоните нам: <a href="' + TEL + '">' + esc(PHONE) + '</a>' + (/debug/.test(location.search) ? '<br><small>Причина: ' + esc(er && er.message || er) + '</small>' : ''); });
