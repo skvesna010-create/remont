@@ -244,8 +244,10 @@
       });
     };
     $$('[data-kind]').forEach(function(a){ a.addEventListener('click', function(){ S.kind = a.dataset.kind; goal('lp_price_click'); }); });
+    var BATHLP = /[?&]kv=bath\b/.test(location.search);   /* реклама «ремонт ванной» сразу ведёт в ветку санузла */
+    if (BATHLP){ S.obj = 'bath'; step = 1; }
     say('Здравствуйте! Я ' + esc(MGR) + ', менеджер Домилии 👋');
-    setTimeout(function(){ typing(500, function(){ say('Посчитаю стоимость ремонта — несколько коротких вопросов, займёт минуту.'); ask(); }); }, 250);
+    setTimeout(function(){ typing(500, function(){ say(BATHLP ? 'Посчитаю стоимость ремонта ванной или санузла — несколько коротких вопросов, займёт минуту.' : 'Посчитаю стоимость ремонта — несколько коротких вопросов, займёт минуту.'); ask(); }); }, 250);
   }
 
   /* форма записи на замер внизу */
