@@ -427,3 +427,5 @@ html.qz-lock .mbar,html.qz-lock .ck{display:none}
 .bth-in{list-style:none;counter-reset:b;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .bth-in li{counter-increment:b;background:#fff;border:1px solid #e3e9e6;border-radius:14px;padding:16px 16px 16px 54px;position:relative}.bth-in li:before{content:counter(b);position:absolute;left:16px;top:16px;width:26px;height:26px;border-radius:50%;background:#0B3B2E;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
 .bth-in b{display:block;font-size:16px;margin-bottom:3px}.bth-in span{color:#5f6b66;font-size:14px}
+.mg-a{overflow:hidden}.mg-a img{width:100%;height:100%;object-fit:cover;display:block}
+.qz-ct-a{width:24px;height:24px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}

@@ -167,7 +167,7 @@
     var weeksText = function(w){ var m = w % 100, l = w % 10; if (m > 10 && m < 20) return w + ' недель'; if (l === 1) return w + ' неделя'; if (l > 1 && l < 5) return w + ' недели'; return w + ' недель'; };
     /* квиз-переписка с менеджером */
     var MGR = Q.manager || 'Андрей', box = body.closest('.qz'), qh = $('.qz-h', box);
-    if (qh) qh.innerHTML = '<div class="mg"><i class="mg-a">' + esc(MGR.charAt(0)) + '</i><div><b>' + esc(MGR) + '</b><small>менеджер Домилии · расчёт стоимости</small></div></div><span id="qzStep">Вопрос 1 из 6</span>';
+    if (qh) qh.innerHTML = '<div class="mg"><i class="mg-a">' + (Q.managerPhoto ? '<img src="' + esc(Q.managerPhoto) + '" srcset="' + esc(Q.managerPhoto) + ' 1x, ' + esc(Q.managerPhoto2 || Q.managerPhoto) + ' 2x" alt="' + esc(MGR) + '" width="40" height="40">' : esc(MGR.charAt(0))) + '</i><div><b>' + esc(MGR) + '</b><small>менеджер Домилии · расчёт стоимости</small></div></div><span id="qzStep">Вопрос 1 из 6</span>';
     stepT = $('#qzStep');
     body.innerHTML = '<div class="ch" id="chLog"></div><div class="ch-o" id="chOpt"></div>';
     var chLog = $('#chLog'), opt = $('#chOpt'), busy = false;

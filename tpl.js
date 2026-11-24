@@ -223,7 +223,7 @@
       objects(C) + reviews(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
   }
 
-  function qzCt(C){ var s = C.settings || {}; return '      <div class="qz-ct">Удобнее голосом? <a data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a>' + (s.max ? ' · <a data-goal="lp_messenger" href="' + esc(s.max) + '" target="_blank" rel="noopener">Написать в MAX</a>' : '') + '</div>\n'; }
+  function qzCt(C){ var s = C.settings || {}; return '      <div class="qz-ct">' + ((C.quiz || {}).managerPhoto ? '<img class="qz-ct-a" src="' + esc(C.quiz.managerPhoto) + '" alt="" width="24" height="24" loading="lazy">' : '') + 'Удобнее голосом? <a data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a>' + (s.max ? ' · <a data-goal="lp_messenger" href="' + esc(s.max) + '" target="_blank" rel="noopener">Написать в MAX</a>' : '') + '</div>\n'; }
 
   /* ---------- ремонт ванной: отдельная страница под рекламу «ремонт ванной / санузла» ---------- */
   function pageBath(C){

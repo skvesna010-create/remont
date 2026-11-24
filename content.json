@@ -1,5 +1,5 @@
 {
- "_v": 1794850134169,
+ "_v": 1794850134170,
  "settings": {
   "phone": "+7 (992) 001-43-88",
   "email": "zakaz-domilia@yandex.ru",
@@ -161,7 +161,9 @@
    }
   ],
   "bathRate": 43000,
-  "bathMin": 160000
+  "bathMin": 160000,
+  "managerPhoto": "/img/andrey-96.webp",
+  "managerPhoto2": "/img/andrey-192.webp"
  },
  "prices": {
   "show": false,
