@@ -166,7 +166,7 @@
     };
     var weeksText = function(w){ var m = w % 100, l = w % 10; if (m > 10 && m < 20) return w + ' недель'; if (l === 1) return w + ' неделя'; if (l > 1 && l < 5) return w + ' недели'; return w + ' недель'; };
     /* квиз-переписка с менеджером */
-    var MGR = Q.manager || 'Андрей', box = body.closest('.qz'), qh = $('.qz-h', box);
+    var MGR = Q.manager || 'Станислав', box = body.closest('.qz'), qh = $('.qz-h', box);
     if (qh) qh.innerHTML = '<div class="mg"><i class="mg-a">' + (Q.managerPhoto ? '<img src="' + esc(Q.managerPhoto) + '" srcset="' + esc(Q.managerPhoto) + ' 1x, ' + esc(Q.managerPhoto2 || Q.managerPhoto) + ' 2x" alt="' + esc(MGR) + '" width="40" height="40">' : esc(MGR.charAt(0))) + '</i><div><b>' + esc(MGR) + '</b><small>менеджер Домилии · расчёт стоимости</small></div></div><span id="qzStep">Вопрос 1 из 6</span>';
     stepT = $('#qzStep');
     body.innerHTML = '<div class="ch" id="chLog"></div><div class="ch-o" id="chOpt"></div>';
@@ -321,7 +321,7 @@
       if (box && C.crm && lastL && lastL.p && Date.now() - lastL.t < 864e5){
         var now = new Date(), ekbH = (now.getUTCHours() + 5) % 24, days = [], SL = ['10:00–12:00', '13:00–15:00', '16:00–18:00', '18:00–20:00'], pick = { d:null, s:null };
         for (var i = (ekbH < 14 ? 0 : 1); days.length < 3; i++){ var dd = new Date(Date.now() + 5 * 36e5 + i * 864e5); days.push({ iso:dd.toISOString().slice(0, 10), t:(i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : dd.toLocaleDateString('ru-RU', { weekday:'long', timeZone:'UTC' })), s:dd.toLocaleDateString('ru-RU', { day:'numeric', month:'long', timeZone:'UTC' }) }); }
-        box.innerHTML = '<b class="t">Выберите удобное время замера</b><p>Инженер приедет бесплатно, всё измерит и ответит на вопросы. Андрей позвонит подтвердить.</p>' +
+        box.innerHTML = '<b class="t">Выберите удобное время замера</b><p>Инженер приедет бесплатно, всё измерит и ответит на вопросы. ' + esc(((C.quiz || {}).manager) || 'Менеджер') + ' позвонит подтвердить.</p>' +
           '<div class="sl-d">' + days.map(function(d, k){ return '<button type="button" data-d="' + d.iso + '"' + (k ? '' : ' class="on"') + '><b>' + esc(d.t) + '</b><small>' + esc(d.s) + '</small></button>'; }).join('') + '</div>' +
           '<div class="sl-s">' + SL.map(function(x){ return '<button type="button" data-s="' + x + '">' + x + '</button>'; }).join('') + '</div>' +
           '<button type="button" class="btn wide sl-go" disabled>Записаться на замер</button><small class="sl-n">Не подходит ни одно время? Просто дождитесь звонка — договоримся.</small>';
@@ -335,7 +335,7 @@
             var fd = new URLSearchParams({ phone:lastL.p, day:pick.d, slot:pick.s });
             fetch(C.crm + '/slot', { method:'POST', mode:'no-cors', body:fd, keepalive:true }).catch(function(){}).then(function(){
               goal('lp_slot'); var dt = days.filter(function(x){ return x.iso === pick.d; })[0];
-              box.innerHTML = '<b class="t">Вы записаны на замер ✓</b><p><b>' + esc(dt.t + ', ' + dt.s + ', ' + pick.s) + '</b>. Андрей позвонит, чтобы подтвердить адрес и время.</p>'; }); } });
+              box.innerHTML = '<b class="t">Вы записаны на замер ✓</b><p><b>' + esc(dt.t + ', ' + dt.s + ', ' + pick.s) + '</b>. ' + esc(((C.quiz || {}).manager) || 'Менеджер') + ' позвонит, чтобы подтвердить адрес и время.</p>'; }); } });
       }
     } catch(e){}
   }
