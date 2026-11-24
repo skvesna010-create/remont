@@ -315,6 +315,29 @@
         sum.hidden = false;
       }
     } catch(e){}
+    /* запись на замер: клиент сам выбирает день и время — уходит в его заявку в CRM */
+    try {
+      var lg = ls('dm_leads') || [], lastL = lg[lg.length - 1], box = $('#slot');
+      if (box && C.crm && lastL && lastL.p && Date.now() - lastL.t < 864e5){
+        var now = new Date(), ekbH = (now.getUTCHours() + 5) % 24, days = [], SL = ['10:00–12:00', '13:00–15:00', '16:00–18:00', '18:00–20:00'], pick = { d:null, s:null };
+        for (var i = (ekbH < 14 ? 0 : 1); days.length < 3; i++){ var dd = new Date(Date.now() + 5 * 36e5 + i * 864e5); days.push({ iso:dd.toISOString().slice(0, 10), t:(i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : dd.toLocaleDateString('ru-RU', { weekday:'long', timeZone:'UTC' })), s:dd.toLocaleDateString('ru-RU', { day:'numeric', month:'long', timeZone:'UTC' }) }); }
+        box.innerHTML = '<b class="t">Выберите удобное время замера</b><p>Инженер приедет бесплатно, всё измерит и ответит на вопросы. Андрей позвонит подтвердить.</p>' +
+          '<div class="sl-d">' + days.map(function(d, k){ return '<button type="button" data-d="' + d.iso + '"' + (k ? '' : ' class="on"') + '><b>' + esc(d.t) + '</b><small>' + esc(d.s) + '</small></button>'; }).join('') + '</div>' +
+          '<div class="sl-s">' + SL.map(function(x){ return '<button type="button" data-s="' + x + '">' + x + '</button>'; }).join('') + '</div>' +
+          '<button type="button" class="btn wide sl-go" disabled>Записаться на замер</button><small class="sl-n">Не подходит ни одно время? Просто дождитесь звонка — договоримся.</small>';
+        pick.d = days[0].iso; box.hidden = false;
+        var go = $('.sl-go', box);
+        box.addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return;
+          if (b.dataset.d){ pick.d = b.dataset.d; $$('.sl-d button', box).forEach(function(x){ x.classList.toggle('on', x === b); }); }
+          else if (b.dataset.s){ pick.s = b.dataset.s; $$('.sl-s button', box).forEach(function(x){ x.classList.toggle('on', x === b); }); }
+          go.disabled = !(pick.d && pick.s);
+          if (b === go && pick.d && pick.s){ go.disabled = true; go.textContent = 'Записываем…';
+            var fd = new URLSearchParams({ phone:lastL.p, day:pick.d, slot:pick.s });
+            fetch(C.crm + '/slot', { method:'POST', mode:'no-cors', body:fd, keepalive:true }).catch(function(){}).then(function(){
+              goal('lp_slot'); var dt = days.filter(function(x){ return x.iso === pick.d; })[0];
+              box.innerHTML = '<b class="t">Вы записаны на замер ✓</b><p><b>' + esc(dt.t + ', ' + dt.s + ', ' + pick.s) + '</b>. Андрей позвонит, чтобы подтвердить адрес и время.</p>'; }); } });
+      }
+    } catch(e){}
   }
   if (C.page === '404') goal('lp_404');
 

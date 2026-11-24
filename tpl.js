@@ -52,7 +52,7 @@
   function msgrs(C, cls){
     var s = C.settings || {}, h = '';
     if (s.whatsapp) h += '<a class="msg wa on" data-goal="lp_messenger" href="https://wa.me/' + esc(String(s.whatsapp).replace(/\D/g, '')) + '" target="_blank" rel="noopener" aria-label="Написать в WhatsApp">WA</a>';
-    if (s.max) h += '<a class="msg mx on" data-goal="lp_messenger" href="' + esc(s.max) + '" target="_blank" rel="noopener" aria-label="Написать в MAX">MAX</a>';
+    if (s.max) h += '<a class="msg mxg on" data-goal="lp_messenger" href="' + esc(s.max) + '" target="_blank" rel="noopener" aria-label="Написать в MAX">MAX</a>';
     if (s.telegram) h += '<a class="msg tg on" data-goal="lp_messenger" href="' + esc(/^https?:/.test(s.telegram) ? s.telegram : 'https://t.me/' + String(s.telegram).replace(/^@/, '')) + '" target="_blank" rel="noopener" aria-label="Написать в Telegram">TG</a>';
     return h;
   }
@@ -247,6 +247,7 @@
       '<main class="pg-m">\n  <div class="w">\n    <div class="pg-card">\n      <div class="pg-ok"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#E6F6F0"/><path d="M20 33l8 8 16-18" fill="none" stroke="#007A55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>\n' +
       '      <h1>' + esc(T.title) + '</h1>\n      <p class="pg-lead">' + md(T.text) + '</p>\n' +
       '      <div class="pg-sum" id="sum" hidden></div>\n' +
+      '      <div class="pg-slot" id="slot" hidden></div>\n' +
       ((T.steps || []).length ? '      <ol class="pg-steps">' + T.steps.map(function(x){ return '<li><b>' + esc(x.t) + '</b><span>' + esc(x.s) + '</span></li>'; }).join('') + '</ol>\n' : '') +
       '      <div class="pg-act"><a class="btn" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a>' + msgrs(C) + '</div>\n' +
       '      <p class="pg-back"><a href="/">' + esc(T.btn || 'Вернуться на главную') + '</a></p>\n    </div>\n  </div>\n</main>\n' + footer(C) + cookie(C) + config(C, 'thanks') + '</body>\n</html>\n';
