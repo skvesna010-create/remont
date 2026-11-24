@@ -94,7 +94,7 @@
       ((H.facts || []).length ? '      <div class="facts">' + H.facts.map(function(f){ return '<div><b>' + esc(f.b) + '</b><span>' + esc(f.t) + '</span></div>'; }).join('') + '</div>\n' : '') +
       (H.gift ? '      <div class="gift-strip"><svg viewBox="0 0 32 32" fill="none" stroke="#1FE6AA" stroke-width="2" stroke-linejoin="round"><rect x="5" y="12" width="22" height="15" rx="2"/><path d="M3 8h26v4H3zM16 8v19M16 8c-2-5-8-5-7-1s7 1 7 1zm0 0c2-5 8-5 7-1s-7 1-7 1z"/></svg><p>' + md(H.gift) + '</p></div>\n' : '') +
       '    </div>\n    <div class="qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel((C.settings || {}).phone) + '">' + esc((C.settings || {}).phone) + '</a></p></noscript></div>\n    </div>\n  </div>\n</section>\n';
+      '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel((C.settings || {}).phone) + '">' + esc((C.settings || {}).phone) + '</a></p></noscript></div>\n' + qzCt(C) + '    </div>\n  </div>\n</section>\n';
   }
   function prices(C){
     var P = C.prices; if (!on(P)) return '';
@@ -116,7 +116,7 @@
   }
   function objects(C, cfgObjs){
     var O = C.objects; if (!on(O)) return '';
-    var L = (O.items || []).filter(function(o){ return o.photos && o.photos.length; }).slice(0, 9);
+    var L = (cfgObjs || O.items || []).filter(function(o){ return o.photos && o.photos.length; }).slice(0, 9);
     if (!L.length) return '';
     return '<section class="sec" style="padding-top:0" id="objs">\n  <div class="w">\n    ' + secH(O) + '\n    <div class="objs" id="objList">' +
       L.map(function(p, i){
@@ -206,7 +206,7 @@
       '<main class="kv-m">\n  <div class="kv-bg" aria-hidden="true" style="background-image:url(' + img(H.bg) + ')"></div>\n  <div class="w kv-w">\n' +
       '    <h1>Сколько стоит ремонт <em>вашей</em> квартиры?</h1>\n    <p class="kv-sub">5 вопросов — меньше минуты. Цену закрепим в договоре.</p>\n' +
       '    <div class="qz kv-qz" id="calc" aria-live="polite">\n      <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div>\n      <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n    </div>\n' +
+      '      <div class="qz-b" id="qzBody">' + qz1(C) + '<noscript><p>Чтобы рассчитать стоимость, позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n' + qzCt(C) + '    </div>\n' +
       ((H.facts || []).length ? '    <div class="kv-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') +
       '  </div>\n</main>\n' + cookie(C) + config(C, 'kviz') + '</body>\n</html>\n';
   }
@@ -219,8 +219,25 @@
       '      <div class="vb2-vid"><video id="vbVid" preload="none" playsinline poster="/media/video-poster.jpg"><source src="' + esc((C.film || {}).video || '') + '" type="video/mp4"></video><button type="button" class="vb2-play" data-goal="lp_video"><i>▶</i><span>Знакомство с Домилией<small>50 секунд, со звуком</small></span></button></div>\n' +
       ((H.facts || []).length ? '      <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '    </div>\n' +
       '    <div class="vb2-r">\n      <div class="qz" id="calc" aria-live="polite">\n        <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div>\n        <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '        <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n      </div>\n' + (H.gift ? '      <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '    </div>\n  </div>\n</section>\n' +
+      '        <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n' + qzCt(C) + '      </div>\n' + (H.gift ? '      <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '    </div>\n  </div>\n</section>\n' +
       objects(C) + reviews(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
+  }
+
+  function qzCt(C){ var s = C.settings || {}; return '      <div class="qz-ct">Удобнее голосом? <a data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a>' + (s.max ? ' · <a data-goal="lp_messenger" href="' + esc(s.max) + '" target="_blank" rel="noopener">Написать в MAX</a>' : '') + '</div>\n'; }
+
+  /* ---------- ремонт ванной: отдельная страница под рекламу «ремонт ванной / санузла» ---------- */
+  function pageBath(C){
+    var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {}, B = C.bath || {};
+    var bathObjs = ((C.objects || {}).items || []).filter(function(o){ return /ванн|санузл|туалет/i.test((o.title || '') + ' ' + (o.text || '') + ' ' + (o.kind || '')); });
+    var incl = B.incl || [];
+    return head(C, { title:B.seoTitle || 'Ремонт ванной под ключ в Екатеринбурге — цена в договоре | Домилия', desc:B.seoDesc || 'Ремонт ванной и санузла под ключ: цена в договоре, оплата по этапам, гарантия 3 года. Рассчитайте стоимость за минуту.', canonical:'https://remont.domilia.ru/vannaya/' }) + '<body class="vb bath">\n' + header(C) + '<main>\n' +
+      '<section class="vb-hero2">\n  <div class="w vb2">\n    <div class="vb2-l">\n      <div class="hero-pre"><i></i>' + esc(B.pre || 'Екатеринбург · ремонт ванной и санузла') + '</div>\n      <h1>' + esc(B.title || 'Ремонт ванной под ключ') + ' <em>' + esc(B.accent || 'с ценой в договоре') + '</em></h1>\n      <p class="vb-sub">' + md(B.sub || 'Ответьте на несколько вопросов — посчитаем стоимость ремонта вашей ванной или санузла за минуту.') + '</p>\n' +
+      ((B.promise || []).length ? '      <ul class="bth-pr">' + B.promise.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>\n' : '') +
+      ((H.facts || []).length ? '      <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '    </div>\n' +
+      '    <div class="vb2-r">\n      <div class="qz" id="calc" aria-live="polite">\n        <div class="qz-h"><b>' + esc(B.quizTitle || 'Расчёт ремонта ванной') + '</b><span id="qzStep">Вопрос 1</span></div>\n        <div class="qz-bar"><i id="qzBar"></i></div>\n' +
+      '        <div class="qz-b" id="qzBody"><div class="qz-q">Посчитаем стоимость ремонта ванной или санузла</div><noscript><p>Позвоните: <a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a></p></noscript></div>\n' + qzCt(C) + '      </div>\n    </div>\n  </div>\n</section>\n' +
+      (incl.length ? '<section class="sec" style="padding-top:0">\n  <div class="w">\n    ' + secH({ tag:'Что входит', title:B.inclTitle || 'Ремонт ванной от демонтажа до сантехники', sub:B.inclSub || 'Одна бригада, один договор и одна смета на всё.' }) + '\n    <ol class="bth-in rv">' + incl.map(function(x){ return '<li><b>' + esc(x.t) + '</b>' + (x.s ? '<span>' + md(x.s) + '</span>' : '') + '</li>'; }).join('') + '</ol>\n  </div>\n</section>\n' : '') +
+      why(C) + (bathObjs.length ? objects(C, bathObjs) : '') + reviews(C) + steps(Object.assign({}, C, { steps:Object.assign({}, C.steps, { title:B.stepsTitle || 'Четыре шага до готовой ванной' }) })) + finalB(Object.assign({}, C, { final:Object.assign({}, C.final, { items:((C.final || {}).items || []).filter(function(x){ return !/дизайн-проект/i.test(x); }) }) })) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'bath') + '</body>\n</html>\n';
   }
 
   /* ---------- спасибо ---------- */
@@ -247,7 +264,7 @@
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
-  var LPT = { page:page, pageB:pageB, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  var LPT = { page:page, pageB:pageB, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
   root.LPT = LPT;
   if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
 })(typeof window !== 'undefined' ? window : this);

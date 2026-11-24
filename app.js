@@ -16,7 +16,8 @@
   /* ---------- Яндекс Метрика и цели ---------- */
   if (C.ym){
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r)return;}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
-    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page } });
+    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page === 'bath' ? 'Ванная' : C.page } });
+    try { ym(C.ym, 'getClientID', function(id){ YMID = id || ''; try { sessionStorage.setItem('dm_ymid', YMID); } catch(e){} }); } catch(e){}
   }
   var sent = {};
   function goal(n, once){ if (once && sent[n]) return; sent[n] = 1; try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', n); } catch(e){} }
@@ -25,8 +26,9 @@
   });
 
   /* заявка сразу в CRM Домилия Про (адрес задаётся в админке лендинга) */
-  function toCRM(url, d){ if (!url) return Promise.resolve(false); var skip = { _subject:1, _template:1, _captcha:1, _honey:1, 'Имя':1, 'Телефон':1 }, com = [], b = { name:(d['Имя'] && d['Имя'] !== '—') ? d['Имя'] : '', phone:d['Телефон'] || '', page:location.href };
-    Object.keys(d).forEach(function(k){ if (skip[k]) return; if (/^utm_|^yclid$/.test(k)) { b[k] = d[k]; return; } if (d[k] !== '' && d[k] != null) com.push(k + ': ' + d[k]); });
+  var YMID = ''; try { YMID = sessionStorage.getItem('dm_ymid') || ''; } catch(e){}
+  function toCRM(url, d){ if (!url) return Promise.resolve(false); if (YMID) d = Object.assign({}, d, { ymid:YMID }); var skip = { _subject:1, _template:1, _captcha:1, _honey:1, 'Имя':1, 'Телефон':1 }, com = [], b = { name:(d['Имя'] && d['Имя'] !== '—') ? d['Имя'] : '', phone:d['Телефон'] || '', page:location.href };
+    Object.keys(d).forEach(function(k){ if (skip[k]) return; if (/^utm_|^yclid$|^ymid$/.test(k)) { b[k] = d[k]; return; } if (d[k] !== '' && d[k] != null) com.push(k + ': ' + d[k]); });
     try { var u = JSON.parse(sessionStorage.getItem('dm_utm') || '{}'); Object.keys(u).forEach(function(k){ if (!b[k]) b[k] = u[k]; }); } catch(e){}
     b.comment = com.join('\n'); var fd = new URLSearchParams(); Object.keys(b).forEach(function(k){ if (b[k] != null && b[k] !== '') fd.append(k, b[k]); });
     /* простая отправка формы: без лишних проверок браузера, не зависит от настроек CORS */
@@ -244,7 +246,7 @@
       });
     };
     $$('[data-kind]').forEach(function(a){ a.addEventListener('click', function(){ S.kind = a.dataset.kind; goal('lp_price_click'); }); });
-    var BATHLP = /[?&]kv=bath\b/.test(location.search);   /* реклама «ремонт ванной» сразу ведёт в ветку санузла */
+    var BATHLP = /[?&]kv=bath\b/.test(location.search) || C.page === 'bath';   /* реклама «ремонт ванной» сразу ведёт в ветку санузла */
     if (BATHLP){ S.obj = 'bath'; step = 1; }
     say('Здравствуйте! Я ' + esc(MGR) + ', менеджер Домилии 👋');
     setTimeout(function(){ typing(500, function(){ say(BATHLP ? 'Посчитаю стоимость ремонта ванной или санузла — несколько коротких вопросов, займёт минуту.' : 'Посчитаю стоимость ремонта — несколько коротких вопросов, займёт минуту.'); ask(); }); }, 250);

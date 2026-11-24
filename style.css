@@ -420,3 +420,10 @@ html.qz-lock .mbar,html.qz-lock .ck{display:none}
 .ch-o .opt.ph img{height:84px;object-fit:cover}
 .qz.app .ch-o{max-height:52vh}.qz.app .ch-o .opt.ph img{height:78px}
 .qz.app .ch{padding-bottom:6px}
+/* контакт под квизом и страница «Ремонт ванной» */
+.qz-ct{font-size:13px;color:#5f6b66;padding:10px 16px 12px;border-top:1px solid #e7ecea;text-align:center}.qz-ct a{color:#007A55;font-weight:700;text-decoration:none;white-space:nowrap}
+.qz.app .qz-ct{position:sticky;bottom:0;background:#fff}
+.bth-pr{list-style:none;padding:0;margin:4px 0 18px;display:grid;gap:8px}.bth-pr li{display:flex;gap:10px;align-items:center;font-weight:700;font-size:16px}.bth-pr li:before{content:'';flex:none;width:20px;height:20px;border-radius:50%;background:#1FE6AA url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%23033' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.bth-in{list-style:none;counter-reset:b;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.bth-in li{counter-increment:b;background:#fff;border:1px solid #e3e9e6;border-radius:14px;padding:16px 16px 16px 54px;position:relative}.bth-in li:before{content:counter(b);position:absolute;left:16px;top:16px;width:26px;height:26px;border-radius:50%;background:#0B3B2E;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.bth-in b{display:block;font-size:16px;margin-bottom:3px}.bth-in span{color:#5f6b66;font-size:14px}

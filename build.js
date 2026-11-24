@@ -6,6 +6,8 @@ fs.mkdirSync(__dirname + '/v2', { recursive:true });
 fs.writeFileSync(__dirname + '/v2/index.html', T.pageB(C));
 fs.mkdirSync(__dirname + '/kviz', { recursive:true });
 fs.writeFileSync(__dirname + '/kviz/index.html', T.quizPage(C));
+fs.mkdirSync(__dirname + '/vannaya', { recursive:true });
+fs.writeFileSync(__dirname + '/vannaya/index.html', T.pageBath(C));
 fs.mkdirSync(__dirname + '/spasibo', { recursive:true });
 fs.writeFileSync(__dirname + '/spasibo/index.html', T.thanks(C));
 fs.writeFileSync(__dirname + '/404.html', T.notFound(C));
