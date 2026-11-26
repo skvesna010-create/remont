@@ -237,17 +237,17 @@
     var rv = (R.items || []).slice(0, 6).map(function(r){ return '<div class="mm-rv"><b>' + esc(r.name) + '</b><small>' + esc(r.work) + (r.date ? ' · ' + esc(r.date) : '') + '</small><p>' + esc(r.text) + '</p></div>'; }).join('');
     return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="mm">\n<main class="mm-w">\n' +
       '<div class="mm-top"><a class="mn-logo" href="/" aria-label="Домилия">' + LOGO + '</a><span>Екатеринбург</span></div>\n' +
-      '<div class="mm-demo">Пример страницы. Пунктиром отмечены места для ваших фото, подарков и отзывов.</div>\n' +
+      
       '<h1>Ремонт квартиры в Екатеринбурге под ключ — цена в договоре, гарантия 3 года и оплата по этапам</h1>\n' +
       '<ul class="mm-ck">' + ck('<b>Фиксированная цена</b> — прописана в договоре и не растёт') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — по факту выполненных и принятых работ') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') +
       '</ul>\n' +
-      '<div class="mm-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="mm-ask">+ ещё подарок на выбор: [кондиционер / инсталляция / клининг — уточнить]</span></div>\n' +
+      '<div class="mm-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="mm-gl">+ подарок на выбор: кондиционер, инсталляция или профессиональный клининг</span></div>\n' +
       car(vis) + '\n' +
       '<section><h2>Дизайн-проекты, по которым мы сделали ремонт</h2><p>Проекты нашего дизайнера для квартир в Екатеринбурге — по ним бригада уже сделала ремонт.</p>' + car(['/img/dp/kuh_09.webp', '/img/dp/spal_05.webp', '/img/dp/san_00.webp', '/img/dp/kor_01.webp', '/img/dp/spal_13.webp', '/img/dp/san_12.webp']) + '</section>\n' +
       '<section><h2>Бесплатный дизайн-проект</h2><p>Дизайнер сделает технический проект под ваши пожелания.</p><ul class="mm-ck">' + ck('<b>Услуга бесплатна</b> при капитальном ремонте') + ck('Планировка, чертежи электрики и сантехники, смета') + ck('<b>Визуализация</b> — видите результат до начала работ') + '</ul><p class="mm-cap">Так выглядит визуализация в дизайн-проекте</p>' + car(des) + '</section>\n' +
       '<section><h2>Контроль ремонта на всех этапах</h2><p>Фото и видео с объекта, этапы, документы и оплаты — в личном кабинете в телефоне. Отчёт по каждому этапу перед оплатой.</p>' + '<figure class="mm-brig"><img src="/img/brigada-na-obekte.webp" alt="Бригада Домилии на объекте" loading="lazy" width="1400" height="1036"></figure>' + '</section>\n' +
-      '<section><h2>Подарок при заказе ремонта</h2>' + ph(1, 'Подарок на выбор — уточнить') + '</section>\n' +
-      (rv ? '<section><h2>Отзывы клиентов</h2><p class="mm-ask">Лучше — скриншоты с 2ГИС или Яндекс Карт</p><div class="mm-car mm-rvs">' + rv + '</div></section>\n' : '') +
+      '<section><figure class="mm-brig"><img src="/img/podarok.webp" alt="Подарок при заказе ремонта на выбор: кондиционер, инсталляция или профессиональный клининг" loading="lazy" width="1671" height="941"></figure></section>\n' +
+      (rv ? '<section><h2>Отзывы клиентов</h2><div class="mm-car mm-rvs">' + rv + '</div></section>\n' : '') +
       '<section class="mm-fin"><h2>Получите расчёт стоимости ремонта под ключ с гарантией 3 года</h2>' +
       '<div class="qz" id="calc" aria-live="polite"><div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div><div class="qz-bar"><i id="qzBar"></i></div><div class="qz-b" id="qzBody">' + qz1(C) + '</div>' + qzCt(C) + '</div></section>\n' +
       '<p class="mm-foot">' + esc(s.phone) + ' · ' + esc(s.hours || '') + '<br><a href="' + esc(s.privacyUrl) + '">Политика конфиденциальности</a></p>\n' +
@@ -275,20 +275,20 @@
         'I.forEach(function(b){b.onclick=function(){var v=I.filter(function(x){return cur===null||cur.indexOf(x.dataset.c)>-1});op(v.indexOf(b));};});})()</script>'; };
     var sec = function(id, inner, cls){ return '<section class="ms-s ' + (cls || '') + '" id="' + id + '"><div class="w">' + inner + '</div></section>\n'; };
     return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="ms">\n' + header(C).replace('href="/#calc"', 'href="#calc"') + '<main>\n' +
-      '<div class="ms-demo">Пример сайта. Пунктиром отмечены места для ваших фото, подарков и отзывов.</div>\n' +
+      
       '<section class="ms-hero"><div class="w ms-hg"><div>' +
       '<div class="ms-pre">Екатеринбург · ремонт квартир под ключ</div>' +
       '<h1>Ремонт квартиры под ключ — цена в договоре, гарантия 3 года и оплата по этапам</h1>' +
       '<ul class="ms-ck c2">' + ck('<b>Фиксированная цена</b> в договоре') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — после приёмки') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') + '</ul>' +
-      '<div class="ms-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="ms-ask">+ подарок на выбор: [кондиционер / инсталляция / клининг — уточнить]</span></div>' +
+      '<div class="ms-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="ms-gl">+ подарок на выбор: кондиционер, инсталляция или профессиональный клининг</span></div>' +
       '<div class="ms-cta"><a class="btn" href="#calc" data-goal="lp_cta_top">Рассчитать стоимость</a>' + mx + '</div></div>' +
       '<div class="ms-hp">' + fig('/img/dp/f/kuh_03.webp', 'big') + fig('/img/dp/f/spal_00.webp') + fig('/img/dp/f/san_04.webp') + '</div></div></section>\n' +
       sec('works', '<div class="ms-h"><h2>Дизайн-проекты, по которым мы сделали ремонт</h2><p>Проекты нашего дизайнера для квартир в Екатеринбурге — по ним бригада уже сделала ремонт. Нажмите на фото, чтобы посмотреть крупно.</p></div>' + gallery() + '') +
       sec('design', '<div class="ms-2"><div><div class="ms-pre g">Подарок</div><h2>Бесплатный дизайн-проект</h2><p>Дизайнер сделает технический проект под ваши пожелания — бригада работает по точным чертежам, без переделок.</p><ul class="ms-ck">' + ck('<b>Услуга бесплатна</b> при капитальном ремонте') + ck('Планировка, чертежи электрики и сантехники, смета') + ck('<b>Визуализация</b> — видите результат до начала работ') + '</ul><a class="btn" href="#calc" data-goal="lp_cta_gift">Получить дизайн-проект</a></div>' +
         '<div class="ms-g2">' + fig('/img/dp/f/kuh_02.webp') + fig('/img/dp/f/spal_17.webp') + fig('/img/dp/f/kor_00.webp') + fig('/img/dp/f/san_02.webp') + '</div></div>', 'alt') +
       sec('control', '<div class="ms-2 rev">' + '<figure class="ms-brig"><img src="/img/brigada-na-obekte.webp" alt="Бригада Домилии на объекте" loading="lazy" width="1400" height="1036"></figure>' + '<div><h2>Контроль ремонта на всех этапах</h2><p>Вы видите, как идёт ремонт, даже не приезжая на объект.</p><ul class="ms-ck">' + ck('<b>Фото и видео</b> с объекта по каждому этапу') + ck('<b>Личный кабинет</b> в телефоне: этапы, документы, оплаты') + ck('Платите за этап <b>только после приёмки</b>') + '</ul></div></div>') +
-      sec('gift', '<div class="ms-2"><div><h2>Подарок при заказе ремонта</h2><p class="ms-ask">Что реально готовы дарить — уточнить: кондиционер, инсталляция, клининг после ремонта, скидка на материалы через Домилия Маркет.</p></div>' + ph('Фото подарка') + '</div>', 'alt') +
-      (rv ? sec('reviews', '<div class="ms-h"><h2>Отзывы клиентов</h2><p class="ms-ask">Лучше — скриншоты с 2ГИС или Яндекс Карт</p></div><div class="ms-g3 rvs">' + rv + '</div>') : '') +
+      sec('gift', '<figure class="ms-gift"><img src="/img/podarok.webp" alt="Подарок при заказе ремонта на выбор: кондиционер, инсталляция или профессиональный клининг" loading="lazy" width="1671" height="941"></figure><div class="ms-gc"><a class="btn" href="#calc" data-goal="lp_cta_gift">Рассчитать стоимость и выбрать подарок</a></div>', 'alt') +
+      (rv ? sec('reviews', '<div class="ms-h"><h2>Отзывы клиентов</h2></div><div class="ms-g3 rvs">' + rv + '</div>') : '') +
       '<section class="ms-fin" id="calc-s"><div class="w ms-fg"><div><h2>Получите расчёт стоимости ремонта под ключ с гарантией 3 года</h2><ul class="ms-ck">' + ck('Ответьте на несколько вопросов — меньше минуты') + ck('Покажем стоимость сразу') + ck('Точную смету — после бесплатного замера') + '</ul><p class="ms-ph2">Или позвоните: <a href="' + tel(s.phone) + '" data-tel data-goal="lp_call">' + esc(s.phone) + '</a></p></div>' +
       '<div class="ms-fb"><a class="btn big" href="#calc" data-goal="lp_cta_matrix">Рассчитать стоимость</a><small>Несколько вопросов — меньше минуты. Бесплатно.</small></div></div></section>\n' +
       '<div class="ms-qw"><div class="qz" id="calc" aria-live="polite"><div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div><div class="qz-bar"><i id="qzBar"></i></div><div class="qz-b" id="qzBody">' + qz1(C) + '</div>' + qzCt(C) + '</div></div>\n' +

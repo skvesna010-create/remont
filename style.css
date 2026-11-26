@@ -538,3 +538,5 @@ body.ms .qz.app{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width
 @media(max-width:980px){.gl-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.gl-g{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gl-tabs{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 14px;padding:0 16px;scrollbar-width:none}.gl-tabs button{flex:none}.gl-p,.gl-n{display:none!important}}
 .gl-i img{height:auto}
+.ms-gl,.mm-gl{display:block;margin-top:4px;font-size:14px;color:var(--g2);font-weight:500}
+.ms-gift{border-radius:16px!important}.ms-gift img{aspect-ratio:auto!important;height:auto}.ms-gc{text-align:center;margin-top:20px}
