@@ -1,5 +1,5 @@
 {
- "_v": 1794850134175,
+ "_v": 1794850134176,
  "settings": {
   "phone": "+7 (992) 001-43-88",
   "email": "zakaz-domilia@yandex.ru",
@@ -151,13 +151,13 @@
     "v": "flat",
     "t": "Квартиру целиком",
     "s": "комнаты, кухня, санузел",
-    "img": "/img/quiz-flat-s.webp"
+    "img": "/img/quiz-dp-flat-s.webp"
    },
    {
     "v": "bath",
     "t": "Только санузел",
     "s": "ванная, туалет или совмещённый",
-    "img": "/img/quiz-bath-s.webp"
+    "img": "/img/quiz-dp-bath-s.webp"
    }
   ],
   "bathRate": 43000,
