@@ -1,9 +1,9 @@
 /* Сборка страниц из content.json: node build.js */
 const fs = require('fs'), T = require('./tpl.js');
 const C = JSON.parse(fs.readFileSync(__dirname + '/content.json', 'utf8'));
-fs.writeFileSync(__dirname + '/index.html', T.page(C));
+fs.writeFileSync(__dirname + '/index.html', T.pageS(C));
 fs.mkdirSync(__dirname + '/s', { recursive:true });
-fs.writeFileSync(__dirname + '/s/index.html', T.pageS(C));
+fs.writeFileSync(__dirname + '/s/index.html', T.pageS(C).replace('<head>', '<head><meta name="robots" content="noindex">'));
 fs.mkdirSync(__dirname + '/m', { recursive:true });
 fs.writeFileSync(__dirname + '/m/index.html', T.pageM(C));
 fs.mkdirSync(__dirname + '/c', { recursive:true });

@@ -16,7 +16,7 @@
   /* ---------- Яндекс Метрика и цели ---------- */
   if (C.ym){
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r)return;}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
-    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 'c' ? 'C новый' : C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page === 'bath' ? 'Ванная' : C.page } });
+    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 's' ? 'S главная' : C.page === 'c' ? 'C новый' : C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page === 'bath' ? 'Ванная' : C.page } });
     try { ym(C.ym, 'getClientID', function(id){ YMID = id || ''; try { sessionStorage.setItem('dm_ymid', YMID); } catch(e){} }); } catch(e){}
   }
   var sent = {};

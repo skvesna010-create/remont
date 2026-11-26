@@ -274,7 +274,7 @@
         'function rd(){var b=vis[k];lb.querySelector("img").src="/img/dp/f/"+b.dataset.id+".webp";lb.querySelector(".gl-c").textContent=(k+1)+" из "+vis.length;}function go(d){k=(k+d+vis.length)%vis.length;rd();}function cl(){lb.hidden=true;document.documentElement.style.overflow="";removeEventListener("keydown",ky);}function ky(e){if(e.key==="Escape")cl();if(e.key==="ArrowRight")go(1);if(e.key==="ArrowLeft")go(-1);}' +
         'I.forEach(function(b){b.onclick=function(){var v=I.filter(function(x){return cur===null||cur.indexOf(x.dataset.c)>-1});op(v.indexOf(b));};});})()</script>'; };
     var sec = function(id, inner, cls){ return '<section class="ms-s ' + (cls || '') + '" id="' + id + '"><div class="w">' + inner + '</div></section>\n'; };
-    return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="ms">\n' + header(C).replace('href="/#calc"', 'href="#calc"') + '<main>\n' +
+    return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:false, canonical:'https://remont.domilia.ru/' }) + '<body class="ms">\n' + header(C).replace('href="/#calc"', 'href="#calc"') + '<main>\n' +
       
       '<section class="ms-hero"><div class="w ms-hg"><div>' +
       '<div class="ms-pre">Екатеринбург · ремонт квартир под ключ</div>' +
