@@ -540,3 +540,7 @@ body.ms .qz.app{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width
 .gl-i img{height:auto}
 .ms-gl,.mm-gl{display:block;margin-top:4px;font-size:14px;color:var(--g2);font-weight:500}
 .ms-gift{border-radius:16px!important}.ms-gift img{aspect-ratio:auto!important;height:auto}.ms-gc{text-align:center;margin-top:20px}
+.ms-gfs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ms-gf{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}.ms-gf img{width:100%;height:auto;aspect-ratio:520/232;object-fit:cover}.ms-gf div{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px}.ms-gf b{font-weight:600;font-size:17px}.ms-gf span{font-size:14px;color:var(--muted);line-height:1.45}
+.mm-car .ms-gf{flex:0 0 82%;scroll-snap-align:start}
+@media(max-width:760px){.ms-gfs{grid-template-columns:1fr}}
