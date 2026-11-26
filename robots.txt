@@ -1,3 +1,12 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /a/
+Disallow: /c/
+Disallow: /s/
+Disallow: /m/
+Disallow: /v2/
+Disallow: /kviz/
+Disallow: /spasibo/
+
+Sitemap: https://remont.domilia.ru/sitemap.xml
