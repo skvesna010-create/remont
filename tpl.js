@@ -240,11 +240,11 @@
       '<div class="mm-demo">Пример страницы. Пунктиром отмечены места для ваших фото, подарков и отзывов.</div>\n' +
       '<h1>Ремонт квартиры в Екатеринбурге под ключ — цена в договоре, гарантия 3 года и оплата по этапам</h1>\n' +
       '<ul class="mm-ck">' + ck('<b>Фиксированная цена</b> — прописана в договоре и не растёт') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — по факту выполненных и принятых работ') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') +
-      (hit.price ? ck('Под ключ — <b>' + esc(hit.price) + '/м²</b>') : '') + '</ul>\n' +
+      '</ul>\n' +
       '<div class="mm-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="mm-ask">+ ещё подарок на выбор: [кондиционер / инсталляция / клининг — уточнить]</span></div>\n' +
-      car(vis, 'визуализация') + '\n' +
+      car(vis) + '\n' +
       '<section><h2>Примеры готовых ремонтов</h2><p>Наши объекты в Екатеринбурге: площадь, срок и что сделали.</p>' + ph(3, 'Фото вашего объекта') + '</section>\n' +
-      '<section><h2>Бесплатный дизайн-проект</h2><p>Дизайнер сделает технический проект под ваши пожелания.</p><ul class="mm-ck">' + ck('<b>Услуга бесплатна</b> при капитальном ремонте') + ck('Планировка, чертежи электрики и сантехники, смета') + ck('<b>Визуализация</b> — видите результат до начала работ') + '</ul><p class="mm-cap">Примеры проектов нашего дизайнера</p>' + car(des, 'визуализация') + '</section>\n' +
+      '<section><h2>Бесплатный дизайн-проект</h2><p>Дизайнер сделает технический проект под ваши пожелания.</p><ul class="mm-ck">' + ck('<b>Услуга бесплатна</b> при капитальном ремонте') + ck('Планировка, чертежи электрики и сантехники, смета') + ck('<b>Визуализация</b> — видите результат до начала работ') + '</ul><p class="mm-cap">Так выглядит визуализация в дизайн-проекте</p>' + car(des) + '</section>\n' +
       '<section><h2>Контроль ремонта на всех этапах</h2><p>Фото и видео с объекта, этапы, документы и оплаты — в личном кабинете в телефоне. Отчёт по каждому этапу перед оплатой.</p>' + ph(1, 'Фото бригады на объекте') + '</section>\n' +
       '<section><h2>Подарок при заказе ремонта</h2>' + ph(1, 'Подарок на выбор — уточнить') + '</section>\n' +
       (rv ? '<section><h2>Отзывы клиентов</h2><p class="mm-ask">Лучше — скриншоты с 2ГИС или Яндекс Карт</p><div class="mm-car mm-rvs">' + rv + '</div></section>\n' : '') +
@@ -258,7 +258,7 @@
   function pageS(C){
     var s = C.settings || {}, Q = C.quiz || {}, R = C.reviews || {}, rows = (C.prices || {}).rows || [], hit = rows.filter(function(x){ return x.hit; })[0] || {};
     var ck = function(t){ return '<li><i aria-hidden="true"></i><span>' + t + '</span></li>'; };
-    var fig = function(u, cls){ return '<figure class="' + (cls || '') + '"><img src="' + esc(u) + '" alt="" loading="lazy" width="800" height="600"><figcaption>визуализация</figcaption></figure>'; };
+    var fig = function(u, cls){ return '<figure class="' + (cls || '') + '"><img src="' + esc(u) + '" alt="" loading="lazy" width="800" height="600"></figure>'; };
     var ph = function(t, cls){ return '<div class="ms-ph ' + (cls || '') + '"><span>' + esc(t) + '</span></div>'; };
     var mx = s.max ? '<a class="btn lt" href="' + esc(s.max) + '" target="_blank" rel="noopener" data-goal="lp_messenger">Написать в MAX</a>' : '';
     var rv = (R.items || []).slice(0, 6).map(function(r){ return '<div class="ms-rv"><b>' + esc(r.name) + '</b><small>' + esc(r.work) + (r.date ? ' · ' + esc(r.date) : '') + '</small><p>' + esc(r.text) + '</p></div>'; }).join('');
@@ -268,7 +268,7 @@
       '<section class="ms-hero"><div class="w ms-hg"><div>' +
       '<div class="ms-pre">Екатеринбург · ремонт квартир под ключ</div>' +
       '<h1>Ремонт квартиры под ключ — цена в договоре, гарантия 3 года и оплата по этапам</h1>' +
-      '<ul class="ms-ck c2">' + ck('<b>Фиксированная цена</b> в договоре') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — после приёмки') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') + (hit.price ? ck('Под ключ — <b>' + esc(hit.price) + '/м²</b>') : '') + '</ul>' +
+      '<ul class="ms-ck c2">' + ck('<b>Фиксированная цена</b> в договоре') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — после приёмки') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') + '</ul>' +
       '<div class="ms-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="ms-ask">+ подарок на выбор: [кондиционер / инсталляция / клининг — уточнить]</span></div>' +
       '<div class="ms-cta"><a class="btn" href="#calc" data-goal="lp_cta_top">Рассчитать стоимость</a>' + mx + '</div></div>' +
       '<div class="ms-hp">' + fig('/img/dvuhkomnatnaya-kvartira-v-akademicheskom-nku7td.webp', 'big') + fig('/img/odnokomnatnaya-kvartira-v-novostroyke-na-9dkvqs.webp') + fig('/img/vannaya-pod-klyuch-na-uralmashe-srcgmv.webp') + '</div></div></section>\n' +
@@ -300,7 +300,7 @@
   function pageB(C){
     var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
     return head(C, { title:(C.seo || {}).title, desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="vb">\n' + header(C) + '<main>\n' +
-      '<section class="vb-hero2">\n  <div class="w vb2">\n    <div class="vb2-l">\n      <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n      <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n      <p class="vb-sub">' + (function(){ var r = ((C.prices || {}).rows || []).filter(function(x){ return x.hit; })[0]; return r ? 'Под ключ — <b>' + esc(r.price) + '/м²</b>. ' : ''; })() + 'Точная стоимость вашей квартиры за минуту: 5 вопросов, без регистрации.</p>\n' +
+      '<section class="vb-hero2">\n  <div class="w vb2">\n    <div class="vb2-l">\n      <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n      <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n      <p class="vb-sub">Узнайте стоимость своей квартиры за минуту — 5 вопросов, без регистрации.</p>\n' +
       '      <div class="vb2-vid"><video id="vbVid" preload="none" playsinline poster="/media/video-poster.jpg"><source src="' + esc((C.film || {}).video || '') + '" type="video/mp4"></video><button type="button" class="vb2-play" data-goal="lp_video"><i>▶</i><span>Знакомство с Домилией<small>50 секунд, со звуком</small></span></button></div>\n' +
       ((H.facts || []).length ? '      <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '    </div>\n' +
       '    <div class="vb2-r">\n      <div class="qz" id="calc" aria-live="polite">\n        <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div>\n        <div class="qz-bar"><i id="qzBar"></i></div>\n' +
