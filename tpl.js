@@ -199,6 +199,33 @@
       footer(C) + mbar(C) + cookie(C) + config(C, 'main') + '</body>\n</html>\n';
   }
 
+  /* ---------- вариант C (главная): цена сразу, открытый калькулятор, короткая форма ---------- */
+  function pageC(C){
+    var s = C.settings || {}, P = C.prices || {}, rows = P.rows || [], hit = rows.filter(function(x){ return x.hit; })[0] || rows[0] || {}, Q = C.quiz || {}, W = C.why || {}, G = C.gift || {};
+    var chk = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var mx = s.max ? '<a class="btn lt" href="' + esc(s.max) + '" target="_blank" rel="noopener" data-goal="lp_messenger">Написать в MAX</a>' : '';
+    var hero = '<section class="nc-hero">\n  <div class="w nc-h">\n    <div class="nc-hl">\n      <div class="nc-pre">Екатеринбург · ремонт квартир под ключ</div>\n' +
+      '      <h1>Ремонт квартиры под ключ' + (hit.price ? ' <span class="nc-pr">' + esc(hit.price) + '/м²</span>' : '') + '</h1>\n' +
+      '      <p class="nc-sub">Цена фиксируется в договоре и не растёт. Платите по этапам — только после приёмки.</p>\n' +
+      '      <ul class="nc-ul">' + ['Бесплатный замер в удобное время', 'Смета с ценой каждой работы — за 24 часа', 'Гарантия 3 года, прописана в договоре', (G.title ? 'Дизайн-проект в подарок при капитальном ремонте' : '')].filter(Boolean).map(function(x){ return '<li>' + chk + '<span>' + esc(x) + '</span></li>'; }).join('') + '</ul>\n' +
+      '      <div class="nc-cta"><a class="btn" href="#calc" data-goal="lp_cta_top">Рассчитать стоимость</a>' + mx + '</div>\n    </div>\n' +
+      '    <div class="nc-hr"><div class="nc-card"><b class="nc-ct">Запишитесь на бесплатный замер</b><p class="nc-cs">Инженер перезвонит, ответит на вопросы и договорится о дне и часе замера.</p><div data-lf="Записаться на замер" data-lt="Бесплатный замер (первый экран)"><a class="btn wide" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить ' + esc(s.phone) + '</a></div></div></div>\n  </div>\n</section>\n';
+    var opt = function(name, v, t, sub, ck){ return '<label class="nc-o"><input type="radio" name="' + name + '" value="' + v + '"' + (ck ? ' checked' : '') + '><span><b>' + esc(t) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span></label>'; };
+    var calc = '<section class="sec nc-calc" id="calc">\n  <div class="w">\n    <div class="sec-h"><div class="tag">Калькулятор</div><h2>Сколько стоит ремонт вашей квартиры</h2><p>Цена считается сразу, без телефона. Точную сумму инженер закрепит в договоре после замера.</p></div>\n' +
+      '    <div class="nc-cg">\n      <div class="nc-ci">\n' +
+      '        <div class="nc-f"><span class="nc-l">Квартира</span><div class="nc-os">' + opt('flat', 'new', 'Новостройка', 'без отделки или white box', true) + opt('flat', 'old', 'Вторичное жильё', 'есть старая отделка') + '</div></div>\n' +
+      '        <div class="nc-f"><span class="nc-l">Ремонт</span><div class="nc-os c3">' + opt('kind', 'cosm', 'Косметический', 'обновить отделку') + opt('kind', 'cap', 'Под ключ', 'всё, с электрикой и сантехникой', true) + opt('kind', 'design', 'Дизайнерский', 'по проекту') + '</div></div>\n' +
+      '        <div class="nc-f"><span class="nc-l">Площадь: <b id="ncA">56</b> м²</span><input type="range" id="ncR" min="20" max="160" step="1" value="56" aria-label="Площадь квартиры, м²"><div class="nc-rl"><span>20 м²</span><span>160 м²</span></div></div>\n' +
+      '        <p class="nc-bath">Нужен только санузел? <a href="/vannaya/">Расчёт ванной под ключ</a></p>\n      </div>\n' +
+      '      <div class="nc-co"><span class="nc-l">Ориентировочно</span><div class="nc-sum" id="ncSum">—</div><div class="nc-days" id="ncD"></div><p class="nc-inc" id="ncI"></p>' +
+      '<div class="nc-of"><b>Получите точную смету</b><span>Перезвоним, приедем на бесплатный замер и пришлём смету с ценой каждой работы.</span></div><div data-lf="Получить точную смету" data-lt="Калькулятор" data-calc="1"></div></div>\n    </div>\n  </div>\n</section>\n';
+    var tbl = rows.length ? '<section class="sec nc-pt" id="prices">\n  <div class="w">\n    <div class="sec-h"><div class="tag">Цены</div><h2>' + esc(P.title || 'Цены на ремонт квартир') + '</h2><p>' + md(P.sub || '') + '</p></div>\n    <div class="nc-tw"><table class="nc-t"><thead><tr><th>Вид ремонта</th><th>Что входит</th><th>За 1 м²</th><th>Срок</th></tr></thead><tbody>' +
+      rows.map(function(r){ return '<tr' + (r.hit ? ' class="hit"' : '') + '><td><b>' + esc(r.name) + '</b><small>' + esc(r.note || '') + '</small></td><td>' + esc(r.inc || '') + '</td><td class="n">' + esc(r.price || '') + '</td><td>' + esc(r.term || '') + '</td></tr>'; }).join('') + '</tbody></table></div>\n  </div>\n</section>\n' : '';
+    var giftS = on(G) ? '<section class="sec nc-gift">\n  <div class="w"><div class="nc-gb"><div><div class="tag">' + esc(G.tag || 'Подарок') + '</div><h2>' + esc(G.title) + '</h2><p>' + md(G.text) + '</p></div><ul>' + (G.items || []).map(function(x){ return '<li><b>' + esc(x.t) + '</b><span>' + esc(x.s) + '</span></li>'; }).join('') + '</ul></div></div>\n</section>\n' : '';
+    return head(C, { canonical:'https://remont.domilia.ru/' }) + '<body class="nc">\n' + header(C) + '<main>\n' + hero + calc + why(C) + tbl + steps(C) + giftS + reviews(C) + faq(C) + finalB(C) + '</main>\n' + footer(C) +
+      '<div class="mbar nc-mb" id="mbar"><a class="btn lt" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить</a>' + (s.max ? '<a class="btn lt" href="' + esc(s.max) + '" target="_blank" rel="noopener" data-goal="lp_messenger">MAX</a>' : '') + '<a class="btn" href="#calc" data-goal="lp_cta_bar">Рассчитать</a></div>\n' + cookie(C) + config(C, 'c') + '</body>\n</html>\n';
+  }
+
   /* ---------- квиз на весь экран: без чтения, сразу вопросы ---------- */
   function quizPage(C){
     var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
@@ -265,7 +292,7 @@
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
-  var LPT = { page:page, pageB:pageB, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  var LPT = { page:page, pageB:pageB, pageC:pageC, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
   root.LPT = LPT;
   if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
 })(typeof window !== 'undefined' ? window : this);

@@ -16,7 +16,7 @@
   /* ---------- Яндекс Метрика и цели ---------- */
   if (C.ym){
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.scripts.length;j++){if(e.scripts[j].src===r)return;}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
-    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page === 'bath' ? 'Ванная' : C.page } });
+    ym(C.ym, 'init', { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, params:{ lp_variant:C.page === 'c' ? 'C новый' : C.page === 'b' ? 'B видео' : C.page === 'main' ? 'A' : C.page === 'bath' ? 'Ванная' : C.page } });
     try { ym(C.ym, 'getClientID', function(id){ YMID = id || ''; try { sessionStorage.setItem('dm_ymid', YMID); } catch(e){} }); } catch(e){}
   }
   var sent = {};
@@ -251,6 +251,26 @@
     say('Здравствуйте! Я ' + esc(MGR) + ', менеджер Домилии');
     setTimeout(function(){ typing(500, function(){ say(BATHLP ? 'Посчитаю стоимость ремонта ванной или санузла — несколько коротких вопросов, займёт минуту.' : 'Посчитаю стоимость ремонта — несколько коротких вопросов, займёт минуту.'); ask(); }); }, 250);
   }
+
+  /* ---------- вариант C: формы по data-lf и открытый калькулятор ---------- */
+  var ncCalc = null;
+  var ncR = $('#ncR');
+  if (ncR && Q.rates){
+    var KN = { cosm:'Косметический', cap:'Под ключ', design:'Дизайнерский' }, INC = { cosm:'Шпаклёвка и покраска стен, обои, напольные покрытия, замена дверей и сантехприборов.', cap:'Демонтаж, электрика и сантехника, стяжка и выравнивание стен, плитка, чистовая отделка, двери, уборка.', design:'Всё, что входит в ремонт под ключ, плюс работа по дизайн-проекту и авторский надзор.' };
+    var calcNow = function(){
+      var area = +ncR.value, flat = ($('input[name=flat]:checked') || {}).value || 'new', kind = ($('input[name=kind]:checked') || {}).value || 'cap';
+      var rate = Q.rates[kind] || Q.rates.cap, k = flat === 'old' ? (Q.oldFlat || 1) : 1, sp = Q.spread || [0.9, 1.12], base = rate * area * k;
+      var dd = (Q.days || {})[kind] || [40, 0.7], days = dd[0] + dd[1] * area, w1 = Math.max(2, Math.round(days * 0.9 / 7)), w2 = Math.round(days * 1.15 / 7);
+      $('#ncA').textContent = area; $('#ncSum').textContent = money(base * sp[0]) + '\u00a0– ' + money(base * sp[1]) + '\u00a0₽';
+      $('#ncD').textContent = 'Срок: ' + w1 + '–' + w2 + ' недель'; $('#ncI').textContent = INC[kind] || '';
+      ncCalc = { 'Квартира':flat === 'old' ? 'Вторичное жильё' : 'Новостройка', 'Ремонт':KN[kind], 'Площадь':area + ' м²', 'Расчёт на сайте':money(base * sp[0]) + ' – ' + money(base * sp[1]) + ' ₽' };
+    };
+    var touched = function(){ goal('lp_quiz_start', true); };
+    ncR.addEventListener('input', function(){ calcNow(); touched(); });
+    $$('.nc-calc input[type=radio]').forEach(function(x){ x.addEventListener('change', function(){ calcNow(); touched(); }); });
+    calcNow();
+  }
+  $$('[data-lf]').forEach(function(el){ var isC = el.getAttribute('data-calc'); el.innerHTML = ''; el.appendChild(form(el.getAttribute('data-lf'), '', el.getAttribute('data-lt') || 'Бесплатный замер', isC ? function(){ return ncCalc || {}; } : null)); });
 
   /* форма записи на замер внизу */
   var fin = $('#finForm');

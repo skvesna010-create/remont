@@ -1,7 +1,9 @@
 /* Сборка страниц из content.json: node build.js */
 const fs = require('fs'), T = require('./tpl.js');
 const C = JSON.parse(fs.readFileSync(__dirname + '/content.json', 'utf8'));
-fs.writeFileSync(__dirname + '/index.html', T.page(C));
+fs.writeFileSync(__dirname + '/index.html', T.pageC(C));
+fs.mkdirSync(__dirname + '/a', { recursive:true });
+fs.writeFileSync(__dirname + '/a/index.html', T.page(C).replace(/<script>\(function\(\)\{try\{if\(\/\[\?&\]ab=a[\s\S]*?<\/script>/, ''));
 fs.mkdirSync(__dirname + '/v2', { recursive:true });
 fs.writeFileSync(__dirname + '/v2/index.html', T.pageB(C));
 fs.mkdirSync(__dirname + '/kviz', { recursive:true });
