@@ -435,3 +435,6 @@ html.qz-lock .mbar,html.qz-lock .ck{display:none}
 .sl-d button.on,.sl-s button.on{border-color:#007A55;background:#E6F6F0;box-shadow:inset 0 0 0 1px #007A55}
 .sl-go{margin-top:4px}.sl-go[disabled]{opacity:.5}.sl-n{display:block;color:#6b7a73;font-size:12.5px;margin-top:8px;text-align:center}
 .pg-sum[hidden],.pg-slot[hidden]{display:none}
+/* мобильный первый экран: сначала квиз, потом видео */
+@media(max-width:980px){.vb2{display:flex;flex-direction:column;gap:14px}.vb2-l{display:contents}.vb2 .hero-pre,.vb2 h1,.vb2 .vb-sub{order:1}.vb2 h1{margin:4px 0 0}.vb2 .vb-sub{margin:0}.vb2-r{order:2}.vb2-vid{order:3;margin-top:4px}.vb-f{order:4}.vb-hero2{padding:16px 0 30px}.vb2 .hero-pre{display:none}}
+@media(max-width:600px){.ck{left:8px;right:8px;bottom:8px;max-width:none;padding:8px 8px 8px 12px;gap:10px;font-size:12px;line-height:1.35;border-radius:10px}.ck button{padding:8px 12px;font-size:13px}}

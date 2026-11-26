@@ -236,7 +236,7 @@
       say('<b>Расчёт готов ✓</b><small>' + esc(line) + '</small>');
       typing(650, function(){
         say(p ? 'Куда отправить стоимость и подробную смету? Оставьте номер — покажу цену сразу, а смету пришлю удобным способом.' : 'Такие работы считаю по фото и размерам — оставьте номер, пришлю стоимость в течение часа в рабочее время.');
-        opt.innerHTML = '<div class="qz-how">' + ['Звонок', 'WhatsApp', 'MAX', 'SMS'].map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' + (gift ? '<div class="qz-gift">🎁 ' + esc(Q.giftText || '') + '</div>' : '');
+        opt.innerHTML = '<div class="qz-how">' + ['Звонок', 'MAX', 'SMS', 'WhatsApp'].map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' + (gift ? '<div class="qz-gift">🎁 ' + esc(Q.giftText || '') + '</div>' : '');
         $$('.qz-how button', opt).forEach(function(b){ b.onclick = function(){ how = b.textContent; $$('.qz-how button', opt).forEach(function(x){ x.classList.toggle('on', x === b); }); }; });
         opt.appendChild(form(p ? (Q.btn || 'Узнать стоимость') : 'Получить расчёт', '', bathOnly ? 'Расчёт санузла (квиз)' : 'Расчёт стоимости (квиз)', function(){
           var d = bathOnly ? { 'Что ремонтируем':'только санузел', 'Санузел':bt, 'Площадь':S.barea + ' м² (примерно)', 'Работы':bw, 'Ванна или душ':S.bshow, 'Инсталляция':S.binst } : { 'Квартира':flat, 'Комнаты':room + ' (~' + S.area + ' м²)', 'Ремонт':KIND[S.kind], 'Санузел':S.bath === 'yes' ? 'да' : 'нет' };
@@ -248,7 +248,7 @@
     $$('[data-kind]').forEach(function(a){ a.addEventListener('click', function(){ S.kind = a.dataset.kind; goal('lp_price_click'); }); });
     var BATHLP = /[?&]kv=bath\b/.test(location.search) || C.page === 'bath';   /* реклама «ремонт ванной» сразу ведёт в ветку санузла */
     if (BATHLP){ S.obj = 'bath'; step = 1; }
-    say('Здравствуйте! Я ' + esc(MGR) + ', менеджер Домилии 👋');
+    say('Здравствуйте! Я ' + esc(MGR) + ', менеджер Домилии');
     setTimeout(function(){ typing(500, function(){ say(BATHLP ? 'Посчитаю стоимость ремонта ванной или санузла — несколько коротких вопросов, займёт минуту.' : 'Посчитаю стоимость ремонта — несколько коротких вопросов, займёт минуту.'); ask(); }); }, 250);
   }
 

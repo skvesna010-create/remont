@@ -215,11 +215,11 @@
   function pageB(C){
     var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
     return head(C, { title:(C.seo || {}).title, desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="vb">\n' + header(C) + '<main>\n' +
-      '<section class="vb-hero2">\n  <div class="w vb2">\n    <div class="vb2-l">\n      <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n      <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n      <p class="vb-sub">Узнайте стоимость своей квартиры за минуту — 5 вопросов, без регистрации.</p>\n' +
+      '<section class="vb-hero2">\n  <div class="w vb2">\n    <div class="vb2-l">\n      <div class="hero-pre"><i></i>' + esc(H.pre || 'Екатеринбург · ремонт квартир под ключ') + '</div>\n      <h1>Ремонт квартиры <em>с ценой в договоре</em></h1>\n      <p class="vb-sub">' + (function(){ var r = ((C.prices || {}).rows || []).filter(function(x){ return x.hit; })[0]; return r ? 'Под ключ — <b>' + esc(r.price) + '/м²</b>. ' : ''; })() + 'Точная стоимость вашей квартиры за минуту: 5 вопросов, без регистрации.</p>\n' +
       '      <div class="vb2-vid"><video id="vbVid" preload="none" playsinline poster="/media/video-poster.jpg"><source src="' + esc((C.film || {}).video || '') + '" type="video/mp4"></video><button type="button" class="vb2-play" data-goal="lp_video"><i>▶</i><span>Знакомство с Домилией<small>50 секунд, со звуком</small></span></button></div>\n' +
       ((H.facts || []).length ? '      <div class="vb-f">' + H.facts.map(function(f){ return '<span><b>' + esc(f.b) + '</b> ' + esc(f.t) + '</span>'; }).join('') + '</div>\n' : '') + '    </div>\n' +
       '    <div class="vb2-r">\n      <div class="qz" id="calc" aria-live="polite">\n        <div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div>\n        <div class="qz-bar"><i id="qzBar"></i></div>\n' +
-      '        <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n' + qzCt(C) + '      </div>\n' + (H.gift ? '      <div class="vb-gift">🎁 ' + md(H.gift) + '</div>\n' : '') + '    </div>\n  </div>\n</section>\n' +
+      '        <div class="qz-b" id="qzBody">' + qz1(C) + '</div>\n' + qzCt(C) + '      </div>\n' + (H.gift ? '      <div class="vb-gift">' + md(H.gift) + '</div>\n' : '') + '    </div>\n  </div>\n</section>\n' +
       objects(C) + reviews(C) + steps(C) + finalB(C) + '</main>\n' + footer(C) + mbar(C) + cookie(C) + config(C, 'b') + '</body>\n</html>\n';
   }
 
