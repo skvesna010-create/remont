@@ -85,7 +85,7 @@
       '<button class="btn wide" type="submit">' + esc(btnText) + '</button><div class="lf-msg" role="status"></div>' +
       '<div class="lf-alt">или позвоните: <a href="' + TEL + '" data-goal="lp_call">' + esc(PHONE) + '</a></div>';
     var ph = f.phone, msg = $('.lf-msg', f), btn = $('button[type=submit]', f);
-    ph.addEventListener('focus', function(){ if (!ph.value) ph.value = '+7 '; goal('lp_form_focus', true); });
+    ph.addEventListener('focus', function(){ if (!ph.value) ph.value = '+7 '; goal('lp_form_focus', true); setTimeout(function(){ try { ph.scrollIntoView({ block:'center', behavior:'smooth' }); } catch(e){} }, 300); });
     ph.addEventListener('input', function(){
       var d = ph.value.replace(/\D/g, ''); if (d[0] === '8') d = '7' + d.slice(1); if (d && d[0] !== '7') d = '7' + d; d = d.slice(0, 11);
       var r = '+7'; if (d.length > 1) r += ' (' + d.slice(1, 4); if (d.length >= 4) r += ') ' + d.slice(4, 7); if (d.length >= 7) r += '-' + d.slice(7, 9); if (d.length >= 9) r += '-' + d.slice(9, 11);
@@ -186,7 +186,7 @@
     var REACT = {
       obj:{ flat:'Отлично, посчитаем ремонт квартиры.', bath:'Санузлы — наша сильная сторона. Пара вопросов про него.' },
       flat:{ 'new':'Новостройка — отлично, сделаем всё с нуля.', 'old':'Понял, вторичка — уберём старое и сделаем как новое.' },
-      kind:{ cap:'Под ключ — самый частый выбор: всё сделаем сами, от черновых работ до уборки.', design:'По дизайн-проекту — красиво получится. Дизайн-проект при таком ремонте в подарок 🎁' },
+      kind:{ cap:'Под ключ — самый частый выбор: всё сделаем сами, от черновых работ до уборки.', design:'По дизайн-проекту — красиво получится. Дизайн-проект при таком ремонте в подарок' },
       bath:{ yes:'Хорошо, санузел тоже возьмём — с гидроизоляцией и гарантией.', no:'Понял, только комнаты.' },
       bwork:{ full:'Под ключ — правильно: гидроизоляция и трубы меняем сразу, чтобы потом не переделывать.', tile:'Понял, плитка.', plumb:'Понял, сантехника и трубы.' },
       bshow:{ 'душевая из плитки':'Душевая из плитки — красиво и удобно, делаем с правильным уклоном к трапу.' }
@@ -236,7 +236,7 @@
       say('<b>Расчёт готов ✓</b><small>' + esc(line) + '</small>');
       typing(650, function(){
         say(p ? 'Куда отправить стоимость и подробную смету? Оставьте номер — покажу цену сразу, а смету пришлю удобным способом.' : 'Такие работы считаю по фото и размерам — оставьте номер, пришлю стоимость в течение часа в рабочее время.');
-        opt.innerHTML = '<div class="qz-how">' + ['Звонок', 'MAX', 'SMS', 'WhatsApp'].map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' + (gift ? '<div class="qz-gift">🎁 ' + esc(Q.giftText || '') + '</div>' : '');
+        opt.innerHTML = '<div class="qz-how">' + ['Звонок', 'MAX', 'SMS', 'WhatsApp'].map(function(c, i){ return '<button type="button" class="' + (i ? '' : 'on') + '">' + c + '</button>'; }).join('') + '</div>' + (gift ? '<div class="qz-gift">' + esc(Q.giftText || '') + '</div>' : '');
         $$('.qz-how button', opt).forEach(function(b){ b.onclick = function(){ how = b.textContent; $$('.qz-how button', opt).forEach(function(x){ x.classList.toggle('on', x === b); }); }; });
         opt.appendChild(form(p ? (Q.btn || 'Узнать стоимость') : 'Получить расчёт', '', bathOnly ? 'Расчёт санузла (квиз)' : 'Расчёт стоимости (квиз)', function(){
           var d = bathOnly ? { 'Что ремонтируем':'только санузел', 'Санузел':bt, 'Площадь':S.barea + ' м² (примерно)', 'Работы':bw, 'Ванна или душ':S.bshow, 'Инсталляция':S.binst } : { 'Квартира':flat, 'Комнаты':room + ' (~' + S.area + ' м²)', 'Ремонт':KIND[S.kind], 'Санузел':S.bath === 'yes' ? 'да' : 'нет' };

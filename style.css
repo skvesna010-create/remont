@@ -558,3 +558,15 @@ body.ms .qz.app{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width
 .qz.app .ch-o .opt{padding-top:10px;padding-bottom:10px}
 .qz.app .qz-ct{flex:none;margin:6px 0 0;padding:8px 0 0;font-size:13px;line-height:1.35;border-top:1px solid #eef1ef}.qz.app .qz-ct-a{display:none}
 }
+/* последний шаг квиза на телефоне: форма и кнопка всегда видны */
+@media(max-width:760px){
+.qz.app:has(form.lf) .qz-ct{display:none}
+.qz.app:has(form.lf) .ch{flex:0 1 auto;max-height:30vh}
+.qz.app:has(form.lf) .ch-o{flex:1 1 auto;max-height:none;overflow-y:auto}
+.qz.app .ch-o .qz-how{gap:6px;margin-bottom:8px}.qz.app .ch-o .qz-how button{padding:7px 12px;font-size:13.5px}
+.qz.app .ch-o .qz-gift{font-size:13px;padding:8px 10px;margin-bottom:8px}
+.qz.app .ch-o .lf{gap:8px}.qz.app .ch-o .lf input[type=tel],.qz.app .ch-o .lf input[type=text]{padding:12px 14px;font-size:16px}
+.qz.app .ch-o .lf .cons{font-size:12px;line-height:1.35}
+.qz.app .ch-o .lf button[type=submit]{position:sticky;bottom:0;z-index:2;box-shadow:0 -8px 16px #fff}
+.qz.app .ch-o .lf .lf-alt{font-size:13px}
+}
