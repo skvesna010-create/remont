@@ -546,3 +546,15 @@ body.ms .qz.app{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width
 @media(max-width:760px){.ms-gfs{grid-template-columns:1fr}}
 .ms-inc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.ms-inc>div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:6px}.ms-inc span{width:30px;height:30px;border-radius:50%;background:var(--g);color:#fff;display:grid;place-items:center;font-weight:600;font-size:14px}.ms-inc b{font-weight:600;font-size:16px}.ms-inc small{font-size:14px;color:var(--muted);line-height:1.45}
 @media(max-width:980px){.ms-inc{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.ms-inc{grid-template-columns:1fr}}
+/* квиз окном на телефоне: переписка видна, варианты компактные */
+@media(max-width:760px){
+.qz.app{padding:calc(8px + env(safe-area-inset-top)) 12px calc(8px + env(safe-area-inset-bottom))}
+.qz.app .qz-h{padding:0}.qz.app .mg i,.qz.app .mg-a{width:36px!important;height:36px!important}.qz.app .mg b{font-size:15px}.qz.app .qz-x{width:34px;height:34px}
+.qz.app .qz-bar{margin:8px 0 0}.qz.app .qz-b{padding:8px 0 0}
+.qz.app .ch{gap:6px;padding:6px 2px 8px}.qz.app .cm{font-size:15px;padding:9px 12px;max-width:88%}
+.qz.app .ch-o{max-height:46vh;padding-top:8px}
+.qz.app .ch-o .opts.c2{grid-template-columns:1fr;gap:6px}
+.qz.app .ch-o .opt.ph{flex-direction:row;align-items:center;min-height:0}.qz.app .ch-o .opt.ph img{width:88px!important;height:60px!important;flex:none;object-fit:cover}.qz.app .ch-o .opt.ph span{padding:6px 12px;font-size:15px}.qz.app .ch-o .opt.ph span small{font-size:12.5px}
+.qz.app .ch-o .opt{padding-top:10px;padding-bottom:10px}
+.qz.app .qz-ct{flex:none;margin:6px 0 0;padding:8px 0 0;font-size:13px;line-height:1.35;border-top:1px solid #eef1ef}.qz.app .qz-ct-a{display:none}
+}
