@@ -254,6 +254,35 @@
       '</main>\n<a class="mm-cta" href="#calc" data-goal="lp_cta_bar">Рассчитать стоимость</a>\n' + cookie(C) + config(C, 'm') + '</body>\n</html>\n';
   }
 
+  /* ---------- вариант S: та же лента выгод, но полноценным сайтом ---------- */
+  function pageS(C){
+    var s = C.settings || {}, Q = C.quiz || {}, R = C.reviews || {}, rows = (C.prices || {}).rows || [], hit = rows.filter(function(x){ return x.hit; })[0] || {};
+    var ck = function(t){ return '<li><i aria-hidden="true"></i><span>' + t + '</span></li>'; };
+    var fig = function(u, cls){ return '<figure class="' + (cls || '') + '"><img src="' + esc(u) + '" alt="" loading="lazy" width="800" height="600"><figcaption>визуализация</figcaption></figure>'; };
+    var ph = function(t, cls){ return '<div class="ms-ph ' + (cls || '') + '"><span>' + esc(t) + '</span></div>'; };
+    var mx = s.max ? '<a class="btn lt" href="' + esc(s.max) + '" target="_blank" rel="noopener" data-goal="lp_messenger">Написать в MAX</a>' : '';
+    var rv = (R.items || []).slice(0, 6).map(function(r){ return '<div class="ms-rv"><b>' + esc(r.name) + '</b><small>' + esc(r.work) + (r.date ? ' · ' + esc(r.date) : '') + '</small><p>' + esc(r.text) + '</p></div>'; }).join('');
+    var sec = function(id, inner, cls){ return '<section class="ms-s ' + (cls || '') + '" id="' + id + '"><div class="w">' + inner + '</div></section>\n'; };
+    return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="ms">\n' + header(C) + '<main>\n' +
+      '<div class="ms-demo">Пример сайта. Пунктиром отмечены места для ваших фото, подарков и отзывов.</div>\n' +
+      '<section class="ms-hero"><div class="w ms-hg"><div>' +
+      '<div class="ms-pre">Екатеринбург · ремонт квартир под ключ</div>' +
+      '<h1>Ремонт квартиры под ключ — цена в договоре, гарантия 3 года и оплата по этапам</h1>' +
+      '<ul class="ms-ck c2">' + ck('<b>Фиксированная цена</b> в договоре') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — после приёмки') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') + (hit.price ? ck('Под ключ — <b>' + esc(hit.price) + '/м²</b>') : '') + '</ul>' +
+      '<div class="ms-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="ms-ask">+ подарок на выбор: [кондиционер / инсталляция / клининг — уточнить]</span></div>' +
+      '<div class="ms-cta"><a class="btn" href="#calc" data-goal="lp_cta_top">Рассчитать стоимость</a>' + mx + '</div></div>' +
+      '<div class="ms-hp">' + fig('/img/dvuhkomnatnaya-kvartira-v-akademicheskom-nku7td.webp', 'big') + fig('/img/odnokomnatnaya-kvartira-v-novostroyke-na-9dkvqs.webp') + fig('/img/vannaya-pod-klyuch-na-uralmashe-srcgmv.webp') + '</div></div></section>\n' +
+      sec('works', '<div class="ms-h"><h2>Примеры готовых ремонтов</h2><p>Наши объекты в Екатеринбурге: площадь, срок и что сделали.</p></div><div class="ms-g3">' + ph('Фото вашего объекта') + ph('Фото вашего объекта') + ph('Фото вашего объекта') + '</div>') +
+      sec('design', '<div class="ms-2"><div><div class="ms-pre g">Подарок</div><h2>Бесплатный дизайн-проект</h2><p>Дизайнер сделает технический проект под ваши пожелания — бригада работает по точным чертежам, без переделок.</p><ul class="ms-ck">' + ck('<b>Услуга бесплатна</b> при капитальном ремонте') + ck('Планировка, чертежи электрики и сантехники, смета') + ck('<b>Визуализация</b> — видите результат до начала работ') + '</ul><a class="btn" href="#calc" data-goal="lp_cta_gift">Получить дизайн-проект</a></div>' +
+        '<div class="ms-g2">' + fig('/img/dvuhkomnatnaya-kvartira-v-akademicheskom-n2sz6x.webp') + fig('/img/odnokomnatnaya-kvartira-v-novostroyke-na-a0gsbq.webp') + fig('/img/dvuhkomnatnaya-kvartira-na-elmashe-z0g3ee.webp') + fig('/img/studiya-s-white-box-na-vize-by9e9c.webp') + '</div></div>', 'alt') +
+      sec('control', '<div class="ms-2 rev">' + ph('Фото бригады на объекте', 'tall') + '<div><h2>Контроль ремонта на всех этапах</h2><p>Вы видите, как идёт ремонт, даже не приезжая на объект.</p><ul class="ms-ck">' + ck('<b>Фото и видео</b> с объекта по каждому этапу') + ck('<b>Личный кабинет</b> в телефоне: этапы, документы, оплаты') + ck('Платите за этап <b>только после приёмки</b>') + '</ul></div></div>') +
+      sec('gift', '<div class="ms-2"><div><h2>Подарок при заказе ремонта</h2><p class="ms-ask">Что реально готовы дарить — уточнить: кондиционер, инсталляция, клининг после ремонта, скидка на материалы через Домилия Маркет.</p></div>' + ph('Фото подарка') + '</div>', 'alt') +
+      (rv ? sec('reviews', '<div class="ms-h"><h2>Отзывы клиентов</h2><p class="ms-ask">Лучше — скриншоты с 2ГИС или Яндекс Карт</p></div><div class="ms-g3 rvs">' + rv + '</div>') : '') +
+      '<section class="ms-fin" id="calc-s"><div class="w ms-fg"><div><h2>Получите расчёт стоимости ремонта под ключ с гарантией 3 года</h2><ul class="ms-ck">' + ck('Ответьте на несколько вопросов — меньше минуты') + ck('Покажем стоимость сразу') + ck('Точную смету — после бесплатного замера') + '</ul><p class="ms-ph2">Или позвоните: <a href="' + tel(s.phone) + '" data-tel data-goal="lp_call">' + esc(s.phone) + '</a></p></div>' +
+      '<div class="qz" id="calc" aria-live="polite"><div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div><div class="qz-bar"><i id="qzBar"></i></div><div class="qz-b" id="qzBody">' + qz1(C) + '</div>' + qzCt(C) + '</div></div></section>\n' +
+      '</main>\n' + footer(C) + '<a class="mm-cta ms-mcta" id="msCta" href="#calc" data-goal="lp_cta_bar">Рассчитать стоимость</a><script>(function(){var b=document.getElementById("msCta"),f=function(){b.classList.toggle("on",scrollY>520)};addEventListener("scroll",f,{passive:true});f();})()</script>\n' + cookie(C) + config(C, 's') + '</body>\n</html>\n';
+  }
+
   /* ---------- квиз на весь экран: без чтения, сразу вопросы ---------- */
   function quizPage(C){
     var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
@@ -320,7 +349,7 @@
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
-  var LPT = { page:page, pageB:pageB, pageC:pageC, pageM:pageM, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  var LPT = { page:page, pageB:pageB, pageC:pageC, pageM:pageM, pageS:pageS, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
   root.LPT = LPT;
   if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
 })(typeof window !== 'undefined' ? window : this);
