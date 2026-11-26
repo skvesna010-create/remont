@@ -226,6 +226,34 @@
       '<div class="mbar nc-mb" id="mbar"><a class="btn lt" data-tel data-goal="lp_call" href="' + tel(s.phone) + '">Позвонить</a>' + (s.max ? '<a class="btn lt" href="' + esc(s.max) + '" target="_blank" rel="noopener" data-goal="lp_messenger">MAX</a>' : '') + '<a class="btn" href="#calc" data-goal="lp_cta_bar">Рассчитать</a></div>\n' + cookie(C) + config(C, 'c') + '</body>\n</html>\n';
   }
 
+  /* ---------- вариант M: мобильная страница-«лента» — выгоды, подарки, фото, отзывы, кнопка всегда внизу ---------- */
+  function pageM(C){
+    var s = C.settings || {}, Q = C.quiz || {}, R = C.reviews || {}, rows = (C.prices || {}).rows || [], hit = rows.filter(function(x){ return x.hit; })[0] || {};
+    var ck = function(t){ return '<li><i aria-hidden="true"></i><span>' + t + '</span></li>'; };
+    var car = function(list, label){ return '<div class="mm-car">' + list.map(function(u){ return '<figure><img src="' + esc(u) + '" alt="" loading="lazy" width="640" height="480">' + (label ? '<figcaption>' + esc(label) + '</figcaption>' : '') + '</figure>'; }).join('') + '</div><div class="mm-hint">листайте →</div>'; };
+    var ph = function(n, t){ var o = ''; for (var i = 0; i < n; i++) o += '<div class="mm-ph"><span>' + esc(t) + '</span></div>'; return '<div class="mm-car">' + o + '</div>'; };
+    var vis = ['/img/dvuhkomnatnaya-kvartira-v-akademicheskom-nku7td.webp', '/img/odnokomnatnaya-kvartira-v-novostroyke-na-9dkvqs.webp', '/img/vannaya-pod-klyuch-na-uralmashe-srcgmv.webp', '/img/studiya-s-white-box-na-vize-xspou0.webp', '/img/dvuhkomnatnaya-kvartira-na-elmashe-ulo8pb.webp'];
+    var des = ['/img/dvuhkomnatnaya-kvartira-v-akademicheskom-n2sz6x.webp', '/img/odnokomnatnaya-kvartira-v-novostroyke-na-a0gsbq.webp', '/img/dvuhkomnatnaya-kvartira-na-elmashe-z0g3ee.webp', '/img/studiya-s-white-box-na-vize-by9e9c.webp'];
+    var rv = (R.items || []).slice(0, 6).map(function(r){ return '<div class="mm-rv"><b>' + esc(r.name) + '</b><small>' + esc(r.work) + (r.date ? ' · ' + esc(r.date) : '') + '</small><p>' + esc(r.text) + '</p></div>'; }).join('');
+    return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="mm">\n<main class="mm-w">\n' +
+      '<div class="mm-top"><a class="mn-logo" href="/" aria-label="Домилия">' + LOGO + '</a><span>Екатеринбург</span></div>\n' +
+      '<div class="mm-demo">Пример страницы. Пунктиром отмечены места для ваших фото, подарков и отзывов.</div>\n' +
+      '<h1>Ремонт квартиры в Екатеринбурге под ключ — цена в договоре, гарантия 3 года и оплата по этапам</h1>\n' +
+      '<ul class="mm-ck">' + ck('<b>Фиксированная цена</b> — прописана в договоре и не растёт') + ck('<b>Гарантия 3 года</b> на все работы') + ck('<b>Оплата поэтапно</b> — по факту выполненных и принятых работ') + ck('<b>Смета за 24 часа</b> с ценой каждой работы') + ck('<b>Бесплатный замер</b> в удобное время') +
+      (hit.price ? ck('Под ключ — <b>' + esc(hit.price) + '/м²</b>') : '') + '</ul>\n' +
+      '<div class="mm-bonus"><b>Бонус:</b> дизайн-проект в подарок при капитальном ремонте<span class="mm-ask">+ ещё подарок на выбор: [кондиционер / инсталляция / клининг — уточнить]</span></div>\n' +
+      car(vis, 'визуализация') + '\n' +
+      '<section><h2>Примеры готовых ремонтов</h2><p>Наши объекты в Екатеринбурге: площадь, срок и что сделали.</p>' + ph(3, 'Фото вашего объекта') + '</section>\n' +
+      '<section><h2>Бесплатный дизайн-проект</h2><p>Дизайнер сделает технический проект под ваши пожелания.</p><ul class="mm-ck">' + ck('<b>Услуга бесплатна</b> при капитальном ремонте') + ck('Планировка, чертежи электрики и сантехники, смета') + ck('<b>Визуализация</b> — видите результат до начала работ') + '</ul><p class="mm-cap">Примеры проектов нашего дизайнера</p>' + car(des, 'визуализация') + '</section>\n' +
+      '<section><h2>Контроль ремонта на всех этапах</h2><p>Фото и видео с объекта, этапы, документы и оплаты — в личном кабинете в телефоне. Отчёт по каждому этапу перед оплатой.</p>' + ph(1, 'Фото бригады на объекте') + '</section>\n' +
+      '<section><h2>Подарок при заказе ремонта</h2>' + ph(1, 'Подарок на выбор — уточнить') + '</section>\n' +
+      (rv ? '<section><h2>Отзывы клиентов</h2><p class="mm-ask">Лучше — скриншоты с 2ГИС или Яндекс Карт</p><div class="mm-car mm-rvs">' + rv + '</div></section>\n' : '') +
+      '<section class="mm-fin"><h2>Получите расчёт стоимости ремонта под ключ с гарантией 3 года</h2>' +
+      '<div class="qz" id="calc" aria-live="polite"><div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div><div class="qz-bar"><i id="qzBar"></i></div><div class="qz-b" id="qzBody">' + qz1(C) + '</div>' + qzCt(C) + '</div></section>\n' +
+      '<p class="mm-foot">' + esc(s.phone) + ' · ' + esc(s.hours || '') + '<br><a href="' + esc(s.privacyUrl) + '">Политика конфиденциальности</a></p>\n' +
+      '</main>\n<a class="mm-cta" href="#calc" data-goal="lp_cta_bar">Рассчитать стоимость</a>\n' + cookie(C) + config(C, 'm') + '</body>\n</html>\n';
+  }
+
   /* ---------- квиз на весь экран: без чтения, сразу вопросы ---------- */
   function quizPage(C){
     var H = C.hero || {}, Q = C.quiz || {}, s = C.settings || {};
@@ -292,7 +320,7 @@
       footer(C) + cookie(C) + config(C, '404') + '</body>\n</html>\n';
   }
 
-  var LPT = { page:page, pageB:pageB, pageC:pageC, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
+  var LPT = { page:page, pageB:pageB, pageC:pageC, pageM:pageM, pageBath:pageBath, quizPage:quizPage, thanks:thanks, notFound:notFound, esc:esc, money:money, ICONS:Object.keys(ICONS) };
   root.LPT = LPT;
   if (typeof module !== 'undefined' && module.exports) module.exports = LPT;
 })(typeof window !== 'undefined' ? window : this);
