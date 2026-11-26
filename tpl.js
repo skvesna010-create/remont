@@ -263,7 +263,7 @@
     var mx = s.max ? '<a class="btn lt" href="' + esc(s.max) + '" target="_blank" rel="noopener" data-goal="lp_messenger">Написать в MAX</a>' : '';
     var rv = (R.items || []).slice(0, 6).map(function(r){ return '<div class="ms-rv"><b>' + esc(r.name) + '</b><small>' + esc(r.work) + (r.date ? ' · ' + esc(r.date) : '') + '</small><p>' + esc(r.text) + '</p></div>'; }).join('');
     var sec = function(id, inner, cls){ return '<section class="ms-s ' + (cls || '') + '" id="' + id + '"><div class="w">' + inner + '</div></section>\n'; };
-    return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="ms">\n' + header(C) + '<main>\n' +
+    return head(C, { title:'Ремонт квартиры в Екатеринбурге под ключ — Домилия', desc:(C.seo || {}).description, noindex:true, canonical:'https://remont.domilia.ru/' }) + '<body class="ms">\n' + header(C).replace('href="/#calc"', 'href="#calc"') + '<main>\n' +
       '<div class="ms-demo">Пример сайта. Пунктиром отмечены места для ваших фото, подарков и отзывов.</div>\n' +
       '<section class="ms-hero"><div class="w ms-hg"><div>' +
       '<div class="ms-pre">Екатеринбург · ремонт квартир под ключ</div>' +
@@ -279,7 +279,8 @@
       sec('gift', '<div class="ms-2"><div><h2>Подарок при заказе ремонта</h2><p class="ms-ask">Что реально готовы дарить — уточнить: кондиционер, инсталляция, клининг после ремонта, скидка на материалы через Домилия Маркет.</p></div>' + ph('Фото подарка') + '</div>', 'alt') +
       (rv ? sec('reviews', '<div class="ms-h"><h2>Отзывы клиентов</h2><p class="ms-ask">Лучше — скриншоты с 2ГИС или Яндекс Карт</p></div><div class="ms-g3 rvs">' + rv + '</div>') : '') +
       '<section class="ms-fin" id="calc-s"><div class="w ms-fg"><div><h2>Получите расчёт стоимости ремонта под ключ с гарантией 3 года</h2><ul class="ms-ck">' + ck('Ответьте на несколько вопросов — меньше минуты') + ck('Покажем стоимость сразу') + ck('Точную смету — после бесплатного замера') + '</ul><p class="ms-ph2">Или позвоните: <a href="' + tel(s.phone) + '" data-tel data-goal="lp_call">' + esc(s.phone) + '</a></p></div>' +
-      '<div class="qz" id="calc" aria-live="polite"><div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div><div class="qz-bar"><i id="qzBar"></i></div><div class="qz-b" id="qzBody">' + qz1(C) + '</div>' + qzCt(C) + '</div></div></section>\n' +
+      '<div class="ms-fb"><a class="btn big" href="#calc" data-goal="lp_cta_matrix">Рассчитать стоимость</a><small>Несколько вопросов — меньше минуты. Бесплатно.</small></div></div></section>\n' +
+      '<div class="ms-qw"><div class="qz" id="calc" aria-live="polite"><div class="qz-h"><b>' + esc(Q.title || 'Расчёт стоимости ремонта') + '</b><span id="qzStep">Вопрос 1 из 6</span></div><div class="qz-bar"><i id="qzBar"></i></div><div class="qz-b" id="qzBody">' + qz1(C) + '</div>' + qzCt(C) + '</div></div>\n' +
       '</main>\n' + footer(C) + '<a class="mm-cta ms-mcta" id="msCta" href="#calc" data-goal="lp_cta_bar">Рассчитать стоимость</a><script>(function(){var b=document.getElementById("msCta"),f=function(){b.classList.toggle("on",scrollY>520)};addEventListener("scroll",f,{passive:true});f();})()</script>\n' + cookie(C) + config(C, 's') + '</body>\n</html>\n';
   }
 

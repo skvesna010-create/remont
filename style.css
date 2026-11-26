@@ -523,3 +523,8 @@ body.ms{background:#fff}.ms h1,.ms h2{font-weight:600}
 @media(max-width:980px){.ms-hg,.ms-2,.ms-fg{grid-template-columns:1fr;gap:26px}.ms-2.rev>:first-child{order:2}}
 @media(max-width:760px){.ms-ck.c2{grid-template-columns:1fr}.ms-g3,.ms-g2{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 4px;gap:10px;scrollbar-width:none}.ms-g3>*,.ms-g2>*{flex:0 0 82%;scroll-snap-align:start}
 .ms-mcta{display:block}.ms .top .btn{display:none}body.ms .ck{bottom:76px}.ms-hp{grid-template-columns:1fr 1fr}}
+/* S: квиз только окном по кнопке */
+.ms-qw .qz:not(.app){display:none}
+.ms-fb{display:flex;flex-direction:column;align-items:flex-start;gap:10px;align-self:center}.ms-fb .btn.big{font-size:18px;padding:18px 34px}.ms-fb small{color:#C9CFD2;font-size:14px}
+@media(min-width:760px){html.qz-lock body.ms:after{content:"";position:fixed;inset:0;background:rgba(10,12,13,.6);z-index:999}
+body.ms .qz.app{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);height:min(760px,92vh);border-radius:16px;padding:16px 18px;box-shadow:0 30px 80px rgba(0,0,0,.4)}}

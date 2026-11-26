@@ -171,7 +171,7 @@
     stepT = $('#qzStep');
     body.innerHTML = '<div class="ch" id="chLog"></div><div class="ch-o" id="chOpt"></div>';
     var chLog = $('#chLog'), opt = $('#chOpt'), busy = false;
-    var MOB = function(){ return innerWidth < 760; }, isApp = false;
+    var POP = C.page === 's', MOB = function(){ return POP || innerWidth < 760; }, isApp = false;   /* на странице S квиз всегда открывается окном по кнопке */
     var cls = document.createElement('button'); cls.type = 'button'; cls.className = 'qz-x'; cls.setAttribute('aria-label', 'Свернуть'); cls.textContent = '✕'; if (qh) qh.appendChild(cls);
     var toEnd = function(){ chLog.scrollTop = chLog.scrollHeight; }, scroll = function(){ toEnd(); requestAnimationFrame(toEnd); setTimeout(toEnd, 80); setTimeout(toEnd, 350); };
     if (window.ResizeObserver) new ResizeObserver(toEnd).observe(chLog);
