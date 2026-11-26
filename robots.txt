@@ -10,3 +10,4 @@ Disallow: /kviz/
 Disallow: /spasibo/
 
 Sitemap: https://remont.domilia.ru/sitemap.xml
+Disallow: /vannaya-old/
