@@ -82,7 +82,8 @@
           sampling:{ mousemove:80, scroll:150, input:'last', media:800 }, blockClass:'rr-block' });
         setInterval(function(){ flush(); }, 5000); addEventListener('pagehide', function(){ flush(true); }); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') flush(true); }); };
       var load = function(){ var s = document.createElement('script'); s.src = '/rr.js?v=1'; s.async = true; s.onload = start; document.head.appendChild(s); };
-      if (document.readyState === 'complete') setTimeout(load, 300); else addEventListener('load', function(){ setTimeout(load, 300); });
+      var once = function(){ if (once.d) return; once.d = 1; load(); };
+      if (document.readyState === 'complete') setTimeout(once, 300); else { addEventListener('load', function(){ setTimeout(once, 300); }); setTimeout(once, 2500); }
     })();
     return { vid:V.vid, ev:function(c, x){ add(c, x); if (c !== 's' && c !== 'b') soon(); }, now:send };
   })();
