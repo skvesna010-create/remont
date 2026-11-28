@@ -21,15 +21,15 @@
     try { ym(C.ym, 'getClientID', function(id){ YMID = id || ''; try { sessionStorage.setItem('dm_ymid', YMID); } catch(e){} }); } catch(e){}
   }
   var sent = {};
-  function goal(n, once){ if (once && sent[n]) return; sent[n] = 1; try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', n); } catch(e){} }
+  function goal(n, once){ if (once && sent[n]) return; sent[n] = 1; try { if (C.ym && window.ym) ym(C.ym, 'reachGoal', n); } catch(e){} try { TRK.ev('g', n); } catch(e){} }
   document.addEventListener('click', function(e){
     var a = e.target.closest && e.target.closest('[data-goal]'); if (a) goal(a.dataset.goal);
   });
 
   /* заявка сразу в CRM Домилия Про (адрес задаётся в админке лендинга) */
   var YMID = ''; try { YMID = sessionStorage.getItem('dm_ymid') || ''; } catch(e){}
-  function toCRM(url, d){ if (!url) return Promise.resolve(false); if (YMID) d = Object.assign({}, d, { ymid:YMID }); var skip = { _subject:1, _template:1, _captcha:1, _honey:1, 'Имя':1, 'Телефон':1 }, com = [], b = { name:(d['Имя'] && d['Имя'] !== '—') ? d['Имя'] : '', phone:d['Телефон'] || '', page:location.href };
-    Object.keys(d).forEach(function(k){ if (skip[k]) return; if (/^utm_|^yclid$|^ymid$/.test(k)) { b[k] = d[k]; return; } if (d[k] !== '' && d[k] != null) com.push(k + ': ' + d[k]); });
+  function toCRM(url, d){ if (!url) return Promise.resolve(false); if (YMID) d = Object.assign({}, d, { ymid:YMID }); if (TRK.vid) d = Object.assign({}, d, { dmvid:TRK.vid }); var skip = { _subject:1, _template:1, _captcha:1, _honey:1, 'Имя':1, 'Телефон':1 }, com = [], b = { name:(d['Имя'] && d['Имя'] !== '—') ? d['Имя'] : '', phone:d['Телефон'] || '', page:location.href };
+    Object.keys(d).forEach(function(k){ if (skip[k]) return; if (/^utm_|^yclid$|^ymid$|^dmvid$/.test(k)) { b[k] = d[k]; return; } if (d[k] !== '' && d[k] != null) com.push(k + ': ' + d[k]); });
     try { var u = JSON.parse(sessionStorage.getItem('dm_utm') || '{}'); Object.keys(u).forEach(function(k){ if (!b[k]) b[k] = u[k]; }); } catch(e){}
     b.comment = com.join('\n'); var fd = new URLSearchParams(); Object.keys(b).forEach(function(k){ if (b[k] != null && b[k] !== '') fd.append(k, b[k]); });
     /* простая отправка формы: без лишних проверок браузера, не зависит от настроек CORS */
@@ -44,6 +44,35 @@
     if (Object.keys(UTM).length) sessionStorage.setItem('dm_utm', JSON.stringify(UTM)); else UTM = JSON.parse(sessionStorage.getItem('dm_utm') || '{}');
     if (!sessionStorage.getItem('dm_ref')) sessionStorage.setItem('dm_ref', document.referrer || 'прямой заход');
   } catch(e){}
+
+  /* ---------- свой счётчик визитов (Директ Домилия → «Посетители»): источник, прокрутка, шаги квиза, заявка.
+     Без телефона и имени — только действия на сайте; визит длится, пока открыта вкладка (переходит и на «Спасибо») ---------- */
+  var TRK = (function(){
+    var m = /^(https?:\/\/[^\/]+)\/lead\/([\w-]+)/.exec(C.crm || ''); if (!m || /[?&]notrack/.test(location.search)) return { ev:function(){}, vid:'' };
+    var URL_ = m[1] + '/t/' + m[2], rnd = function(){ return (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)).slice(0, 18); };
+    var V = null; try { V = JSON.parse(sessionStorage.getItem('dm_v') || 'null'); } catch(e){}
+    if (!V || Date.now() - (V.ts || 0) > 30 * 60e3){ var uid = ls('dm_uid'); if (!uid){ uid = rnd(); ls('dm_uid', uid); }
+      V = { vid:rnd(), uid:uid, t0:Date.now(), host:location.host, land:location.pathname.slice(0, 180), ref:document.referrer || '', utm:(function(){ var u = Object.assign({}, UTM); try { var st = new URLSearchParams(location.search).get('src'); if (st) u.src = st; } catch(e){} return u; })(), dev:/Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'm' : 'd', ev:[], dur:0 }; }
+    var dirty = true, add = function(c, x){ if (V.ev.length >= 290) return; V.ev.push([Math.round((Date.now() - V.t0) / 1000), c, String(x == null ? '' : x).slice(0, 150)]); dirty = true; };
+    var keep = function(){ V.ts = Date.now(); try { sessionStorage.setItem('dm_v', JSON.stringify(V)); } catch(e){} };
+    var send = function(){ if (!dirty) return; dirty = false; keep(); var body = JSON.stringify(V);
+      try { if (navigator.sendBeacon && navigator.sendBeacon(URL_, new Blob([body], { type:'text/plain' }))) return; } catch(e){}
+      try { fetch(URL_, { method:'POST', mode:'no-cors', body:body, keepalive:true, headers:{ 'Content-Type':'text/plain' } }); } catch(e){} };
+    var tm = 0, soon = function(){ clearTimeout(tm); tm = setTimeout(send, 1500); };
+    add('p', location.pathname + (document.title ? '|' + document.title.slice(0, 60) : ''));
+    /* активное время: считаем только пока вкладка видна и человек что-то делает */
+    var act = Date.now(); ['pointerdown', 'touchstart', 'keydown', 'scroll', 'mousemove'].forEach(function(e){ addEventListener(e, function(){ act = Date.now(); }, { passive:true }); });
+    setInterval(function(){ if (document.visibilityState === 'visible' && Date.now() - act < 30e3){ V.dur += 5; dirty = true; } }, 5000);
+    /* прокрутка: 25/50/75/100% */
+    var sm = 0; addEventListener('scroll', function(){ var h = document.documentElement.scrollHeight - innerHeight; if (h <= 0) return; var p = Math.min(100, Math.round(scrollY / h * 100)); [25, 50, 75, 100].forEach(function(x){ if (p >= x && sm < x){ sm = x; add('s', x); } }); }, { passive:true });
+    /* какие блоки увидели — по заголовкам секций */
+    if (window.IntersectionObserver){ var seen = {}, io = new IntersectionObserver(function(L){ L.forEach(function(e){ if (!e.isIntersecting) return; var t = (e.target.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 60); if (t && !seen[t]){ seen[t] = 1; add('b', t); } io.unobserve(e.target); }); }, { threshold:.6 });
+      setTimeout(function(){ $$('main h2, section h2, .sec h2, h2').slice(0, 30).forEach(function(h){ io.observe(h); }); }, 300); }
+    setInterval(send, 15000);
+    addEventListener('pagehide', send); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') send(); });
+    setTimeout(send, 2000);
+    return { vid:V.vid, ev:function(c, x){ add(c, x); if (c !== 's' && c !== 'b') soon(); }, now:send };
+  })();
 
   /* ---------- плашка cookie ---------- */
   var ck = $('#ck');
@@ -116,6 +145,7 @@
       crm.then(function(okC){ return okC ? { j:{ success:'true' }, okC:true } : mail.then(function(j){ return { j:j, okC:false }; }); })
         .then(function(x){ var j = x.j;
           if (String(j.success) !== 'true' && !x.okC){ try { console.warn('FormSubmit:', j.message); } catch(e4){} throw (j && j.message) || 'нет ответа'; }
+          TRK.ev('L', title); TRK.now();
           var log = ls('dm_leads') || []; log.push({ t:Date.now(), p:d }); ls('dm_leads', log);
           try { sessionStorage.setItem('dm_last', JSON.stringify({ title:title, extra:extra ? extra() : null })); } catch(e3){}
           var gone = false, go = function(){ if (!gone){ gone = true; done(f, false); } };
@@ -217,6 +247,7 @@
       if (busy) return; busy = true;
       if (!started){ started = true; goal('lp_quiz_start'); }
       if (MOB()) openApp();
+      TRK.ev('q', step + '|' + st.k + '|' + o.t);
       S[st.k] = o.v; if (st.k === 'rooms') S.area = o.a; if (st.k === 'btype' && o.v === 'wc') S.barea = 1.5; if (st.k === 'barea') S.barea = S.btype === 'wc' ? Math.min(o.a, 2.5) : o.a;
       opt.innerHTML = ''; say(esc(o.t), 'u');
       var r = (REACT[st.k] || {})[o.v] || (st.k === 'rooms' ? 'Понял, ' + o.t.toLowerCase() + '.' : st.k === 'when' ? 'Записал.' : '');
