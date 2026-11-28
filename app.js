@@ -71,6 +71,19 @@
     setInterval(send, 15000);
     addEventListener('pagehide', send); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') send(); });
     setTimeout(send, 2000);
+    /* запись «как видео» (rrweb): подгружаем после загрузки страницы, поля ввода скрыты, шлём кусками раз в 5 сек */
+    (function(){
+      var RU = m[1] + '/r/' + m[2] + '/' + V.vid + '/', buf = [], size = 0, seq = +(V.rs || 0), stop = null;
+      var flush = function(end){ if (!buf.length) return; var body = JSON.stringify(buf); buf = []; size = 0; var u = RU + (seq++); V.rs = seq; keep();
+        if (end && body.length < 60000 && navigator.sendBeacon){ try { if (navigator.sendBeacon(u, new Blob([body], { type:'text/plain' }))) return; } catch(e){} }
+        try { fetch(u, { method:'POST', mode:'no-cors', body:body, keepalive:body.length < 60000, headers:{ 'Content-Type':'text/plain' } }); } catch(e){} };
+      var start = function(){ if (!window.rrwebRecord || stop) return;
+        stop = rrwebRecord({ emit:function(e){ buf.push(e); try { size += JSON.stringify(e).length; } catch(x){ size += 500; } if (size > 400000) flush(); }, maskAllInputs:true, inlineStylesheet:true, recordCanvas:false, collectFonts:false,
+          sampling:{ mousemove:80, scroll:150, input:'last', media:800 }, blockClass:'rr-block' });
+        setInterval(function(){ flush(); }, 5000); addEventListener('pagehide', function(){ flush(true); }); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') flush(true); }); };
+      var load = function(){ var s = document.createElement('script'); s.src = '/rr.js?v=1'; s.async = true; s.onload = start; document.head.appendChild(s); };
+      if (document.readyState === 'complete') setTimeout(load, 300); else addEventListener('load', function(){ setTimeout(load, 300); });
+    })();
     return { vid:V.vid, ev:function(c, x){ add(c, x); if (c !== 's' && c !== 'b') soon(); }, now:send };
   })();
 
