@@ -46,7 +46,7 @@
       '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" type="image/png" sizes="120x120" href="/favicon-120x120.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
       '<link rel="preload" href="/fonts/montserrat-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/montserrat-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>\n' +
       '<style>' + [400, 500, 600, 700, 800].map(function(w){ return ['cyrillic', 'U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116', 'latin', 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'].reduce(function(a, x, i, L){ if (i % 2) return a; return a + '@font-face{font-family:Montserrat;font-style:normal;font-weight:' + w + ';font-display:swap;src:url(/fonts/montserrat-' + x + '-' + w + '-normal.woff2) format("woff2");unicode-range:' + L[i + 1] + '}'; }, ''); }).join('') + '</style>\n' +
-      '<link rel="stylesheet" href="/style.css?v=' + v(C) + '"><link rel="preload" href="/app.js?v=' + v(C) + '" as="script">' + ((C.quiz || {}).obj || []).map(function(x){ return '<link rel="preload" href="' + esc(x.img) + '" as="image">'; }).join('') + '\n<meta name="yandex-verification" content="8f62ce537b893b64" /></head>\n';
+      '<link rel="stylesheet" href="/style.css?v=' + v(C) + '"><link rel="preload" href="/app.js?v=' + v(C) + '" as="script">' + ((C.quiz || {}).obj || []).map(function(x){ return '<link rel="preload" href="' + esc(x.img) + '" as="image">'; }).join('') + '\n<meta name="yandex-verification" content="8f62ce537b893b64" />' + ymCode(C) + '</head>\n';
   }
 
   function msgrs(C, cls){
@@ -68,6 +68,11 @@
     var req = [co.name, co.inn ? 'ИНН ' + co.inn : '', co.ogrn ? 'ОГРН ' + co.ogrn : '', co.address].filter(Boolean).join(' · ');
     return '<footer class="foot">\n  <div class="w">\n    <div>© ' + new Date().getFullYear() + ' Домилия · ремонт квартир в Екатеринбурге' + (req ? '<br><small>' + esc(req) + '</small>' : '') + '</div>\n' +
       '    <div class="foot-l"><a href="' + esc(s.mainSite || 'https://domilia.ru/') + '" target="_blank" rel="noopener">Основной сайт domilia.ru</a><a href="' + esc(s.privacyUrl) + '" target="_blank" rel="noopener">Политика конфиденциальности</a><a href="' + esc(s.consentUrl) + '" target="_blank" rel="noopener">Согласие на обработку данных</a></div>\n  </div>\n</footer>\n';
+  }
+  /* Яндекс Метрика: стандартный код счётчика прямо в <head> — его видит проверка установки в Метрике */
+  function ymCode(C){
+    var id = +((C.settings || {}).ym || 0); if (!id) return '';
+    return '\n<!-- Yandex.Metrika counter -->\n<script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(' + id + ',"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});window.__ymHead=1;</script>\n<noscript><div><img src="https://mc.yandex.ru/watch/' + id + '" style="position:absolute;left:-9999px;" alt="" /></div></noscript>\n<!-- /Yandex.Metrika counter -->\n';
   }
   function cookie(C){
     var k = C.cookie || {};
